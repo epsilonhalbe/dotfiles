@@ -1,0 +1,27 @@
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH=$HOME/bin:$PATH
+fi
+
+if [ -d "$HOME/.rvm/bin" ] ; then
+    PATH="$HOME/.rvm/bin:$PATH"
+fi
+
+# set PATH so it includes user's private bin if it exists
+HOMEBINDIR="$HOME/bin"
+if [ -d $HOMEBINDIR ] ; then
+    PATH=$HOMEBINDIR:$PATH
+    for d in $HOMEBINDIR/*/bin; do
+        PATH="$PATH:$d"
+    done
+fi
+
+VIMDIR="/opt/vim/bin/"
+if [ -d $VIMDIR ] ; then
+    PATH=$VIMDIR:$PATH
+fi
+
+OCAMLDIR="/opt/ocaml/bin/"
+if [ -d $OCAMLDIR ] ; then
+    PATH=$OCAMLDIR:$PATH
+fi

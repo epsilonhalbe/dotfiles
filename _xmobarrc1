@@ -1,0 +1,13 @@
+Config { font = "xft:Dejavu Sans Mono:pixelsize=14:antialias=true"
+       -- font = "xft:Bitstream Vera Sans Mono:size=14:antialias=true"
+       , bgColor = "black"
+       , fgColor = "grey"
+       , position = TopW L 70
+       , commands = [ Run StdinReader ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader%"
+       , lowerOnStart = False
+       , border = NoBorder
+       , borderColor = "black"
+       }

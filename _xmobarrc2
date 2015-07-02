@@ -1,0 +1,20 @@
+Config { font = "xft:DejaVu Sans Mono:size=11:antialias=true"
+       , bgColor = "black"
+       , fgColor = "grey"
+       , position = Static { xpos = 0, ypos = 20, width = 1345, height = 20 }
+       , commands = [ Run Weather "LOWW" ["-t"," <tempC>C","-L","64","-H","77","--normal","green","--high","red","--low","lightblue"] 36000
+                    , Run MultiCpu ["-t","<total0> <total1> <total2> <total3>","-L","3","-H","40","--low","green","--normal","yellow","--high","red"] 25
+                    , Run Memory ["-t","Mem: <usedratio>%"] 10
+                    , Run Swap [] 10
+                    , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+                    , Run Kbd [("de(neo)", "NEO"), ("de", "DE"),("us", "US")]
+                    , Run StdinReader
+                    , Run Battery ["-L","33","-H","66","--high","green","--normal","yellow", "--low", "red"] 10
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "}{ %multicpu% | %memory% * %swap% <fc=#ee9a00>%date%</fc> | %kbd% | %LOWW% | %battery%"
+       , lowerOnStart = False
+       , border = NoBorder
+       , borderColor = "black"
+       }

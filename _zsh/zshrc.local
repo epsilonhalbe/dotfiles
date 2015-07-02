@@ -1,0 +1,82 @@
+zrclocal
+
+## genrefcard.pl settings {{{
+
+### doc strings for external functions from files
+#m# f5 grml-wallpaper() Sets a wallpaper (try completion for possible values)
+
+### example: split functions-search 8,16,24,32
+#@# split functions-search 8
+
+## }}}
+export TERM=xterm-256color 
+alias tmux='tmux -2'
+#[[ $TERM != "screen-256color" ]] && tmux
+#if which tmux 2>&1 >/dev/null; then
+    ##if not inside a tmux session, and if no session is started, start a new session
+    #test -z "$TMUX" && (tmux attach || tmux new-session)
+#fi
+# for tmux: export 256color {{{
+#[ -n "$TMUX" ] && export TERM=screen-256color-bce
+# }}}
+
+
+## zsh-git stuff from jcorbin {{{
+# zgitinit and prompt_wunjo_setup must be somewhere in your $fpath, see README for more.
+#
+setopt promptsubst
+
+# Load the prompt theme system
+autoload -U promptinit
+promptinit
+
+# Use the wunjo prompt theme
+prompt wunjo
+# }}}
+
+
+## {{{
+##alias gvim='gvim -p --remote-tab-silent'
+#alias vi='gvim'
+alias vim='gvim'
+alias -s tex=vim
+alias -s bib=vim
+alias -s hs=vim
+alias -s org=vim
+alias -s md=vim
+alias -s py=python3
+alias -s jar='java -jar'
+alias o='xdg-open'
+alias .vimrc='vim ~/.vimrc'
+alias .zshrc='vim ~/.zshrc'
+alias music='mpc -p 6601'
+
+alias mute='amixer -q set Master toggle'
+alias voldown='amixer -c 0 -q set Master 5%- unmute'
+alias volup='amixer -c 0 -q set Master 5%+ unmute'
+alias gnext='dbus-send --print-reply --type=method_call --dest=org.mpris.guayadeque /Player org.freedesktop.MediaPlayer.Next'
+alias gprev='dbus-send --print-reply --type=method_call --dest=org.mpris.guayadeque /Player org.freedesktop.MediaPlayer.Prev'
+alias gplay='dbus-send --print-reply --type=method_call --dest=org.mpris.guayadeque /Player org.freedesktop.MediaPlayer.Pause'
+alias bnext='banshee --next'
+alias bprev='banshee --restart-or-previous'
+alias bplay='banshee --toggle-playing'
+## }}}
+
+# {{{
+function pdfsearch()
+{
+    find . -iname '*.pdf' | while read filename
+    do
+        #echo -e "\033[34;1m// === PDF Document:\033[33;1m $filename\033[0m"
+        pdftotext -q -enc ASCII7 "$filename" "$filename."; grep -s -H --color=always -i $1 "$filename."
+        rm -f "$filename."
+    done
+}
+# }}}
+
+## END OF FILE #################################################################
+# vim:filetype=zsh foldmethod=marker autoindent expandtab shiftwidth=4
+# Local variables:
+# mode: sh
+# End:
+

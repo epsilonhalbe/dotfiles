@@ -1,0 +1,65 @@
+"set background=light        " we are not using a dark background
+"set background=dark         " we are not using a light background
+colorscheme molokai
+"colorscheme solarized
+if (hostname() == 'wollnashorn')
+    set guifont=DejaVu\ Sans\ Mono\ 14
+else
+    set guifont=DejaVu\ Sans\ Mono\ 8
+    set lines=80
+    set columns=143
+endif
+
+set mousehide
+set mouse=c
+set showtabline=2
+
+set guioptions-=m  "remove menu bar
+set guioptions-=T  "remove toolbar
+set guioptions-=r  "remove right-hand scroll bar
+highlight Cursor guifg=black guibg=DarkOrange
+highlight iCursor guifg=black guibg=Green
+set guicursor=n-v-c:block-Cursor
+set guicursor+=i:ver100-iCursor
+set guicursor+=n-v-c:blinkon0
+set guicursor+=i:blinkwait0
+
+hi InterestingWord1 guibg=red4         guifg=black ctermbg=124 ctermfg=black
+hi InterestingWord2 guibg=DarkOrange   guifg=black ctermbg=202 ctermfg=black
+hi InterestingWord3 guibg=DeepSkyBlue1 guifg=black ctermbg=027 ctermfg=black
+
+highlight SpellBad    term=reverse   ctermbg=12 gui=undercurl guisp=Red       " badly spelled word
+highlight SpellCap    term=reverse   ctermbg=9  gui=undercurl guisp=Blue      " word with wrong caps
+highlight SpellRare   term=reverse   ctermbg=13 gui=undercurl guisp=Magenta   " rare word
+highlight SpellLocale term=underline ctermbg=11 gui=undercurl guisp=DarkCyan  " word only exists in other region
+
+" CmdAlias {{{
+
+command! -bang WQ :call SafeWQ('<bang>')
+function! SafeWQ(bang)
+  try
+    if tabpagenr('$') > 1
+      exec 'write'.a:bang
+      exec 'tabclose'.a:bang
+    else
+      exec 'write'.a:bang
+      echo "type wqa to write and close all"
+    endif
+  catch
+    echohl ErrorMsg | echo v:exception | echohl NONE
+  endtry
+endfunction
+
+function! InitPlugins()
+  call CmdAlias('x','WQ')
+  call CmdAlias('q','bd')
+  call CmdAlias('wq','WQ')
+  au! InitPlugins VimEnter
+endfunction
+
+aug InitPlugins
+  au!
+  au VimEnter * :call InitPlugins()
+aug END
+
+" }}}

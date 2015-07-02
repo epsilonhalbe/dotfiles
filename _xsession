@@ -1,0 +1,83 @@
+#!/bin/zsh
+
+# Load resources
+
+#xrdb -merge .Xresources
+
+# Set up an icon tray
+
+trayer --edge top --align right --SetDockType true --SetPartialStrut true \
+ --expand true --width 20 --transparent true --height 19 --tint 0xcccccc & #0x191970 &
+
+# set up gnome fancy shwancyness
+(gnome-screensaver)&
+(gnome-settings-daemon)&
+#(gnome-panel)&
+
+
+#xsetroot -solid midnightblue
+
+(nitrogen --restore) &
+
+# Fire up apps
+
+if [ -x /usr/bin/nm-applet ] ; then
+   (nm-applet --sm-disable)&
+fi
+
+
+# mail
+(sleep 30 && icedove) &
+
+# set mouse acceleration and sensitivity
+#(xset m 0 10) &
+
+## Start Conky after a slight delay
+#(sleep 3s && conky -q) &
+#(sleep 4s && conky -q -c .conkyrcleft) &
+#(sleep 5s && conky -q -c .weather) &
+
+##le incroyable wbar
+#(sleep 1s && wbar -bpress -pos bot-right -zoomf 1.5 -isize 23 -jumpf 1.2 -balfa 0 -nofont -nanim 1)&
+
+# Start volumeicon after a slight delay
+(sleep 1s && volumeicon)&
+
+## Start Clipboard manager
+(sleep 3s && clipit)&
+
+#Autostart the Dropbox deamon
+(sleep 10s && ~/.dropbox-dist/dropboxd)&
+#
+# keepass a password database
+(keepassx)&
+
+#start hotot - my new favourite twitter client
+#(hotot)&
+
+#start workrave - such that you make breaks in time!
+(workrave)&
+
+#start pidgin for jabber and irc
+(pidgin)&
+
+#start gpodder
+#(gpodder)&
+
+#start guake the utility belt for the advanced linux user
+(guake)&
+
+#start
+#(rhythmbox-client --play)&
+(mpd)&
+
+#start the eclim dæmon to get fancy vim and eclipse features
+($HOME/.eclipse/org.eclipse.platform_4.3.0_1473617060_linux_gtk_x86_64/eclimd)&
+
+(sleep 10 && xfce4-power-manager)&
+
+#exec xmonad
+#exec dbus-launch --exit-with-session xmonad
+exec ck-launch-session dbus-launch --exit-with-session xmonad
+#exec ck-launch-session dbus-launch -sh-syntax --exit-with-session xmonad
+#exec gnome-session --session xmonad-gnome "$@"

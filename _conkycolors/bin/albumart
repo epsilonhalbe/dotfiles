@@ -1,0 +1,8 @@
+#!/bin/bash
+artist=`rhythmbox-client --print-playing-format %ta`
+album=`rhythmbox-client --print-playing-format %aa`
+str="`echo "$artist $album" | sed -e s/\\ /+/g`"
+wget `wget "http://www.albumart.org/index.php?srchkey=$str&itempage=1&newsearch=1&searchindex=Music" -q -O - |
+grep "http://www.albumart.org/images/zoom-icon.jpg" -m 1 |
+sed -e 's/" border="0" class="image_border.*//' |
+sed -e 's/.*img src="//'` -q -O /home/epsilonhalbe/.albumart
