@@ -3534,7 +3534,6 @@ zrclocal
 source ~/.zsh/cabal.plugin.zsh
 source ~/.zsh/zshrc.local
 
-
 ## genrefcard.pl settings
 
 ### doc strings for external functions from files

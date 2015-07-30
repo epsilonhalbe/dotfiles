@@ -10,9 +10,11 @@ fi
 # set PATH so it includes user's private bin if it exists
 HOMEBINDIR="$HOME/bin"
 if [ -d $HOMEBINDIR ] ; then
-    PATH=$HOMEBINDIR:$PATH
-    for d in $HOMEBINDIR/*/bin; do
-        PATH="$PATH:$d"
+    for dir in `ls $HOMEBINDIR`; do
+        dir=$HOMEBINDIR/$dir
+        if [[ -d $dir ]] ; then
+            PATH=$dir:$PATH
+        fi
     done
 fi
 

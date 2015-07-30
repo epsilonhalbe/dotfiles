@@ -2,12 +2,11 @@
 "set background=dark         " we are not using a light background
 colorscheme molokai
 "colorscheme solarized
-if (hostname() == 'wollnashorn')
+if (hostname() == 'LoupGarrou')
     set guifont=DejaVu\ Sans\ Mono\ 14
-else
-    set guifont=DejaVu\ Sans\ Mono\ 8
-    set lines=80
-    set columns=143
+endif
+if (hostname() == 'wendigo')
+    set guifont=DejaVu\ Sans\ Mono\ 11
 endif
 
 set mousehide
@@ -17,11 +16,12 @@ set showtabline=2
 set guioptions-=m  "remove menu bar
 set guioptions-=T  "remove toolbar
 set guioptions-=r  "remove right-hand scroll bar
-highlight Cursor guifg=black guibg=DarkOrange
+highlight Cursor guifg=black guibg=MediumVioletRed
 highlight iCursor guifg=black guibg=Green
 set guicursor=n-v-c:block-Cursor
-set guicursor+=i:ver100-iCursor
-set guicursor+=n-v-c:blinkon0
+set guicursor+=i:ver25-iCursor
+set guicursor+=v-c:blinkon0
+set guicursor+=n:blinkon0
 set guicursor+=i:blinkwait0
 
 hi InterestingWord1 guibg=red4         guifg=black ctermbg=124 ctermfg=black
@@ -33,33 +33,38 @@ highlight SpellCap    term=reverse   ctermbg=9  gui=undercurl guisp=Blue      " 
 highlight SpellRare   term=reverse   ctermbg=13 gui=undercurl guisp=Magenta   " rare word
 highlight SpellLocale term=underline ctermbg=11 gui=undercurl guisp=DarkCyan  " word only exists in other region
 
-" CmdAlias {{{
 
-command! -bang WQ :call SafeWQ('<bang>')
-function! SafeWQ(bang)
-  try
-    if tabpagenr('$') > 1
-      exec 'write'.a:bang
-      exec 'tabclose'.a:bang
+"hi ConId term=bold guifg=DeepSkyBlue1 gui=bold
+"hi Type  term=bold guifg=DeepSkyBlue1 gui=bold
+"
+" ToggleBlinkCursor {{{
+
+nmap <F1> :call BlinkCursorToggle()<cr>
+
+func BlinkCursorToggle()
+    if !exists('g:BlinkCursor')
+        call BlinkCursorOn()
     else
-      exec 'write'.a:bang
-      echo "type wqa to write and close all"
+        call BlinkCursorOff()
     endif
-  catch
-    echohl ErrorMsg | echo v:exception | echohl NONE
-  endtry
-endfunction
+endfunc
 
-function! InitPlugins()
-  call CmdAlias('x','WQ')
-  call CmdAlias('q','bd')
-  call CmdAlias('wq','WQ')
-  au! InitPlugins VimEnter
-endfunction
+func BlinkCursorOn()
+    let g:BlinkCursor=1
+    set guicursor+=n:blinkon300
+    highlight CursorLine guibg=LawnGreen
+    echo "Blink ▸ On"
+endfunc
 
-aug InitPlugins
-  au!
-  au VimEnter * :call InitPlugins()
-aug END
-
+func BlinkCursorOff()
+    if exists('g:BlinkCursor')
+        unlet g:BlinkCursor
+        highlight CursorLine term=underline cterm=underline guibg=#293739
+        set guicursor=n-v-c:block-Cursor
+        set guicursor+=i:ver100-iCursor
+        set guicursor+=n-v-c:blinkon0
+        set guicursor+=i:blinkwait0
+    echo "Blink ▸ Off"
+    endif
+endfunc
 " }}}

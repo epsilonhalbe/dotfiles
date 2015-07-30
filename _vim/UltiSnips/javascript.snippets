@@ -1,0 +1,11 @@
+snippet require "provides a basic require satement" b
+var ${1:localname} = require('${2:$1}');
+$0
+endsnippet
+
+snippet gulp.task "inserts a basic gulp task statement" b
+gulp.task('${1:taskname}', function(){
+	gulp.$1(${2:path+glob}, ['${3:tasks', 'to', 'run}']);
+});
+$0
+endsnippet

@@ -24,9 +24,10 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'bitc/lushtags'
 Plugin 'bitc/vim-hdevtools'
 Plugin 'eagletmt/ghcmod-vim'
-Plugin 'wlangstroth/vim-haskell'
+"Plugin 'wlangstroth/vim-haskell'
+Plugin 'raichoo/haskell-vim'
 Plugin 'lukerandall/haskellmode-vim'
-Plugin 'vim-scripts/haskell.vim'
+"Plugin 'vim-scripts/haskell.vim'
 Plugin 'Twinside/vim-hoogle'
 Plugin 'ujihisa/neco-ghc'
 
@@ -37,13 +38,15 @@ Plugin 'lambdatoast/elm.vim'
 Plugin 'neo4j-contrib/cypher-vim-syntax'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'raichoo/purescript-vim'
+Plugin 'marijnh/tern_for_vim'
 
 """ making better vim experience
 Plugin 'ivalkeen/nerdtree-execute'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'honza/vim-snippets'
 Plugin 'SirVer/ultisnips'
-Plugin 'kien/rainbow_parentheses.vim'
+"Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'luochen1990/rainbow'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
@@ -93,7 +96,7 @@ Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-shell'
 Plugin 'Yggdroot/indentLine'
 
-Plugin 'file:///home/epsilonhalbe/prgm/fsharpbinding-vim'
+"Plugin 'file:///home/epsilonhalbe/prgm/fsharpbinding-vim'
 "Plugin 'fsharp/fsharpbinding', {'rtp': '/vim'}
 
 filetype on
@@ -105,6 +108,7 @@ set encoding=utf-8
 set modelines=0
 set showmode " to see which indentation modes are set type in command mode verbose set ai? cin? cink? cino? si? inde? indk?
 set showcmd
+set confirm
 set hidden
 set visualbell
 set errorbells
@@ -139,7 +143,7 @@ set matchtime=3
 "set breakindent
 set showbreak=\ \ \ ↪
 "set splitbelow
-"set splitright
+set splitright
 set fillchars=diff:⣿
 "set   ttimeout
 "set  notimeout
@@ -164,9 +168,9 @@ set title                                            " show title in xterm
 set nojoinspaces
 set cmdheight=1
 "set scrolloff=5                                     " vertical scrolloff
-set scrolloff=999                                    " vertical scrollof if set to 999 cursor is always in the middle of the screen
+set scrolloff=999                                    " vertical scrolloff if set to 999 cursor is always in the middle of the screen
 set sidescroll=1
-set sidescrolloff=0                                  " horzontal scrolloff
+set sidescrolloff=50                                  " horzontal scrolloff
 
 
 " Wildmenu completion {{{
@@ -483,6 +487,7 @@ nnoremap <c-right> 3<c-w><
 nnoremap <c-up> <c-w>+
 nnoremap <c-down> <c-w>-
 
+nmap <C-}> <C-w><C-]>
 " Easier to type, and I never use the default behavior.
 "noremap H ^
 "noremap L g_
@@ -498,7 +503,7 @@ nnoremap <c-down> <c-w>-
 nnoremap <silent> <leader>/ :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
 
 " Ack for the last search.
-nnoremap <silent> <leader>? :execute "Ag! '" . substitute(substitute(substitute(@/, "\\\\<", "\\\\b", ""), "\\\\>", "\\\\b", ""), "\\\\v", "", "") . "'"<CR>
+nnoremap <silent> <leader>* :AckFromSearch<cr>
 
 " Fix linewise visual selection of various text objects
 nnoremap v <C-v>
@@ -654,8 +659,6 @@ augroup ft_c
 augroup END
 
 " }}}
-" Clojure {{{
-" }}}
 " Css {{{
 augroup ft_css
     au!
@@ -673,36 +676,6 @@ augroup ft_diff
     au FileType diff nnoremap <C-Right> ]c
 augroup END
 "}}}
-" Django {{{
-
-augroup ft_django
-    au!
-
-    au BufNewFile,BufRead urls.py           setlocal nowrap
-    au BufNewFile,BufRead urls.py           normal! zR
-    au BufNewFile,BufRead dashboard.py      normal! zR
-    au BufNewFile,BufRead local_settings.py normal! zR
-
-    au BufNewFile,BufRead admin.py     setlocal filetype=python.django
-    au BufNewFile,BufRead urls.py      setlocal filetype=python.django
-    au BufNewFile,BufRead models.py    setlocal filetype=python.django
-    au BufNewFile,BufRead views.py     setlocal filetype=python.django
-    au BufNewFile,BufRead settings.py  setlocal filetype=python.django
-    au BufNewFile,BufRead settings.py  setlocal foldmethod=marker
-    au BufNewFile,BufRead forms.py     setlocal filetype=python.django
-    au BufNewFile,BufRead common_settings.py  setlocal filetype=python.django
-    au BufNewFile,BufRead common_settings.py  setlocal foldmethod=marker
-augroup END
-
-" }}}
-" Firefox {{{
-
-augroup ft_firefox
-    au!
-    au BufRead,BufNewFile ~/Library/Caches/*.html setlocal buftype=nofile
-augroup END
-
-" }}}
 " Fsharp{{{
 
 let g:fsharp_only_check_errors_on_write=1
@@ -723,21 +696,38 @@ augroup ft_haskell
     au BufEnter *.hs compiler ghc
     au BufEnter *.lhs compiler tex
     let g:syntastic_haskell_checkers = ['ghc_mod', 'hlint', 'hdevtools']
-    let g:syntastic_haskell_hdevtools_args='-g -Wall'
-    let g:ghc="~/bin/ghc"
+    let g:syntastic_haskell_hdevtools_args='-g-isrc -g-Wall'
+    let g:ghc="~/bin/ghc/ghc"
     map <silent> <Leader>e :Errors<CR>
     map <silent> tu :call GHC_BrowseAll()<CR>
     map <silent> tw :call GHC_ShowType(1)<CR>
-    au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
-    au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
-    au FileType haskell nnoremap <buffer> <silent> <F3> :HdevtoolsInfo<CR>
-    autocmd BufEnter *.hs set formatprg=pointfree
+    "au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
+    "au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
+    "au FileType haskell nnoremap <buffer> <silent> <F3> :HdevtoolsInfo<CR>
 
+    function! FindCabalSandboxRoot()
+        return finddir('.cabal-sandbox', './;')
+    endfunction
+
+    function! FindCabalSandboxRootPackageConf()
+        return glob(FindCabalSandboxRoot().'/*-packages.conf.d')
+    endfunction
+
+    let g:hdevtools_options = '-g-ilib -g-isrc -g-i. -g-idist/build/autogen -g-Wall -g-package-conf='.FindCabalSandboxRootPackageConf()
+
+
+    autocmd BufEnter *.hs set formatprg=pointfree
+    let g:indentLine_enabled =0
+    let hs_highlight_types = 1
+    let hs_highlight_delimiters = 1
+    let NERD_haskell_alt_style=1
     "let g:htip_bindkeys=1
     "let b:lhs_markup = "tex"
     "let g:haskell_indent_if = 2
     "let b:tex_flavor = 'xelatex'
-    "setlocal makeprg=ghc\ -Wall\ -O2\ 
+    au FileType haskell setlocal omnifunc=necoghc#omnifunc
+    let g:necoghc_enable_detailed_browse = 1
+    set makeprg=cabal\ build
     setlocal errorformat=%f:%l:\ %m
 augroup END
 
@@ -748,17 +738,6 @@ augroup ft_html
 augroup END
 
 " }}}
-" Java {{{
-
-augroup ft_java
-    au!
-    au FileType java setlocal foldmethod=marker
-    au FileType java setlocal foldmarker={,}
-    au Filetype java set makeprg=javac\ %
-    setlocal errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
-augroup END
-
-" }}}
 " Javascript {{{
 
 augroup ft_javascript
@@ -766,10 +745,12 @@ augroup ft_javascript
 
     au FileType javascript setlocal foldmethod=marker
     au FileType javascript setlocal foldmarker={,}
-
+    au FileType javascript setlocal shiftwidth=4
+    let g:syntastic_javascript_checkers=['eslint']
     " Make {<cr> insert a pair of brackets in such a way that the cursor is correctly
     " positioned inside of them AND the following code doesn't get unfolded.
-    au Filetype javascript inoremap <buffer> {<cr> {}<left><cr><space><space><space><space>.<cr><esc>kA<bs>
+    "au Filetype javascript inoremap <buffer> {<cr> {}<left><cr><space><space><space><space>.<cr><esc>kA<bs>
+    au Filetype javascript setlocal nofoldenable
 augroup END
 
 " }}}
@@ -826,14 +807,6 @@ augroup END
 "augroup END
 
 " }}}
-" Lisp {{{
-
-augroup ft_lisp
-    au!
-    au FileType lisp call TurnOnLispFolding()
-augroup END
-
-" }}}
 " Markdown {{{
 
 augroup ft_markdown
@@ -867,117 +840,6 @@ function FT_mail()
     set fileencodings=iso8859-1,utf-8
     " abbreviations
 endfunction
-" }}}
-" Nginx {{{
-
-augroup ft_nginx
-    au!
-
-    au BufRead,BufNewFile /etc/nginx/conf/*                      set ft=nginx
-    au BufRead,BufNewFile /etc/nginx/sites-available/*           set ft=nginx
-    au BufRead,BufNewFile /usr/local/etc/nginx/sites-available/* set ft=nginx
-    au BufRead,BufNewFile vhost.nginx                            set ft=nginx
-
-    au FileType nginx setlocal foldmethod=marker foldmarker={,}
-augroup END
-
-" }}}
-" OrgMode {{{
-" }}
-" Pentadactyl {{{
-
-augroup ft_pentadactyl
-    au!
-    au BufNewFile,BufRead .pentadactylrc set filetype=pentadactyl
-    au BufNewFile,BufRead ~/Library/Caches/TemporaryItems/pentadactyl-*.tmp set nolist wrap linebreak columns=100 colorcolumn=0
-augroup END
-
-" }}}
-" Puppet {{{
-
-augroup ft_puppet
-    au!
-
-    au Filetype puppet setlocal foldmethod=marker
-    au Filetype puppet setlocal foldmarker={,}
-augroup END
-
-" }}}
-" Python {{{
-
-augroup ft_python
-    au!
-
-    " au FileType python setlocal omnifunc=pythoncomplete#Complete
-    au FileType python setlocal define=^\s*\\(def\\\\|class\\)
-    "au FileType python compiler nose
-    au FileType man nnoremap <buffer> <cr> :q<cr>
-
-    " Jesus tapdancing Christ, built-in Python syntax, you couldn't let me
-    " override this in a normal way, could you?
-    au FileType python if exists("python_space_error_highlight") | unlet python_space_error_highlight | endif
-
-    " Jesus, Python.  Five characters of punctuation for a damn string?
-    au FileType python inoremap <buffer> <d-'> _(u'')<left><left>
-
-augroup END
-
-" }}}
-" QuickFix {{{
-
-augroup ft_quickfix
-    au!
-    au Filetype qf setlocal colorcolumn=0 nolist nocursorline wrap
-augroup END
-
-" }}}
-" ReStructuredText {{{
-
-augroup ft_rest
-    au!
-
-    au Filetype rst nnoremap <buffer> <localleader>1 yypVr=
-    au Filetype rst nnoremap <buffer> <localleader>2 yypVr-
-    au Filetype rst nnoremap <buffer> <localleader>3 yypVr~
-    au Filetype rst nnoremap <buffer> <localleader>4 yypVr`
-augroup END
-
-" }}}
-" Ruby {{{
-
-augroup ft_ruby
-    au!
-    au Filetype ruby setlocal foldmethod=syntax
-    autocmd FileType ruby set omnifunc=rubycomplete#Complete
-    " ... and Rails
-    autocmd FileType ruby let g:rubycomplete_rails = 1
-    " ... and to include Classes in global completions
-    autocmd FileType ruby let g:rubycomplete_classes_in_global = 1
-    " Thorfile, Rakefile and Gemfile are Ruby
-augroup END
-
-" }}}
-" Vagrant {{{
-
-augroup ft_vagrant
-    au!
-    au BufRead,BufNewFile Vagrantfile set ft=ruby
-augroup END
-
-" }}}
-" Vim {{{
-
-augroup ft_vim
-    au!
-
-    au FileType vim setlocal foldmethod=marker
-    au FileType help setlocal textwidth=78
-    au BufWinEnter *.txt if &ft == 'help' | wincmd J | endif
-augroup END
-
-" }}}
-" Various rc files {{{
-au BufRead,BufNewFile .apvlvrc set filetype=vim
 " }}}
 " }}}
 " Quick editing ----------------------------------------------------------- {{{
@@ -1062,13 +924,7 @@ imap <S-End> <esc><End>2BEa
 
 " Send visual selection to gist.github.com as a private, filetyped Gist
 " Requires the gist command line too (brew install gist)
-vnoremap <leader>G :w !gist -p -t %:e \| pbcopy<cr>
-
-" Change case
-nnoremap <C-u> gUiw
-inoremap <C-u> <esc>gUiwea
-nnoremap <C-y> guiw
-inoremap <C-y> <esc>guiwea
+"vnoremap <leader>G :w !gist -p -t %:e \| pbcopy<cr>
 
 " insert newline and stay normal (inserting is not that hard)
 nnoremap o o<esc>
@@ -1093,8 +949,6 @@ vnoremap <leader>: :s/\%V\ /:/g<cr>
 " Diffoff
 nnoremap <leader>D :diffoff!<cr>
 
-" Yankring
-nnoremap <silent> <F11> :YRShow<cr>
 
 " Formatting, TextMate-style
 set formatprg=par\ -w80r
@@ -1107,11 +961,6 @@ nnoremap <C-q> mtl200i 101\|dw0`t
 inoremap <C-q> <esc>mtl200i 101\|dw0`ta
 " Easier linewise reselection: selects the previously pasted (to indent …)
 nnoremap <leader>V V`]
-
-" Indenting visual blocks
-"vnoremap >> ><C-v>']$
-"vnoremap << <<C-v>']$
-
 
 " Split line (sister to [J]oin lines)
 " The normal use of S is covered by cc, so don't worry about shadowing it.
@@ -1129,8 +978,6 @@ vnoremap <leader>Al :left<cr>
 vnoremap <leader>Ac :center<cr>
 vnoremap <leader>Ar :right<cr>
 
-" Less chording
-"nnoremap ; :
 
 " Cmdheight switching/commandheight
 nnoremap <leader>1 :set cmdheight=1<cr>
@@ -1140,13 +987,6 @@ nnoremap <leader>2 :set cmdheight=2<cr>
 vnoremap <leader>S y:execute @@<cr>
 nnoremap <leader>S ^vg_y:execute @@<cr>
 
-" Replaste
-nnoremap <D-p> "_ddPV`]=
-
-" Marks and Quotes
-noremap ' `
-noremap æ '
-noremap ` <C-^>
 
 " Select (charwise) the contents of the current line, excluding indentation.
 " Great for pasting Python lines into REPLs.
@@ -1161,10 +1001,6 @@ set completeopt=longest,menuone,preview
 " Sudo to write
 cnoremap w!! w !sudo tee % >/dev/null
 
-" I suck at typing.
-nnoremap <localleader>= ==
-vnoremap - =
-
 " Easy filetype switching {{{
 nnoremap _md :set ft=markdown<CR>
 nnoremap _hd :set ft=htmldjango<CR>
@@ -1174,41 +1010,11 @@ nnoremap _pd :set ft=python.django<CR>
 nnoremap _d  :set ft=diff<CR>
 " }}}
 
-" Toggle paste
-set pastetoggle=<F8>
 map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 " Quickreturn
 "inoremap <c-cr> <esc>A<cr>
 "inoremap <s-cr> <esc>A:<cr>
-
-" Block Colors {{{
-
-let g:blockcolor_state = 0
-function! BlockColor() " {{{
-    if g:blockcolor_state
-        let g:blockcolor_state = 0
-        call matchdelete(77880)
-        call matchdelete(77881)
-        call matchdelete(77882)
-        call matchdelete(77883)
-    else
-        let g:blockcolor_state = 1
-        call matchadd("BlockColor1", '^ \{4}.*', 1, 77880)
-        call matchadd("BlockColor2", '^ \{8}.*', 2, 77881)
-        call matchadd("BlockColor3", '^ \{12}.*', 3, 77882)
-        call matchadd("BlockColor4", '^ \{16}.*', 4, 77883)
-    endif
-endfunction " }}}
-nnoremap <leader>B :call BlockColor()<cr>
-
-" }}}
-" Insert Mode Completion {{{
-
-inoremap <c-l> <c-x><c-l>
-inoremap <c-f> <c-x><c-f>
-
-" }}}
 
 " }}}
 " Training mappings ------------------------------------------------------- {{{
@@ -1225,17 +1031,12 @@ nnoremap Ajk <nop>
 " the tags file with sed and strip them out myself.
 "
 " Sigh.
-nnoremap <leader><cr> :silent !/usr/local/bin/ctags -R . && sed -i .bak -E -e '/^[^	]+	[^	]+.py	.+v$/d' tags<cr>
+" nnoremap <leader><cr> :silent !/usr/local/bin/ctags -R . && sed -i .bak -E -e '/^[^	]+	[^	]+.py	.+v$/d' tags<cr>
+"
 
 " }}}
 " Plugin settings --------------------------------------------------------- {{{
 
-" Ack-> Ag the silver searcher {{{
-
-map <leader>a :Ag!
-let g:agprg="ag --nocolor --nogroup --column"
-
-" }}}
 " Autoclose {{{
 
 nmap <Leader>x <Plug>ToggleAutoCloseMappings
@@ -1339,8 +1140,13 @@ let g:gundo_preview_bottom = 1
 " }}}
 " Haskellmode {{{
 
-let g:haddock_browser = "/usr/bin/chromium-browser"
+" Open the definition in a new vsplit
+nnoremap <LocalLeader>? :sp<CR>:exec("tag ".expand("<cword>"))<cr>
+
+let g:haddock_browser = "/usr/bin/chromium"
 let g:haddock_browser_callformat = "%s %s"
+let g:haddock_docdir= "~/angebotsservice/.cabal-sandbox/share/doc/x86_64-linux-ghc-7.6.3/"
+let g:haddock_indexfiledir= "~/.vim/"
 
 " }}}
 " Headlights {{{
@@ -1388,7 +1194,7 @@ inoremap <F2> <esc>:NERDTreeToggle<cr>
 let g:NERDTreeWinSize=25
 
 au Filetype nerdtree setlocal nolist
-au Filetype nerdtree setlocal sidescrolloff=0
+"au Filetype nerdtree setlocal sidescrolloff=0
 
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore =['\~$','.*\.pyc$', 'pip-log\.txt$', 'whoosh_index']
@@ -1409,67 +1215,33 @@ let NERDTreeDirArrows = 1
 let g:Powerline_symbols = 'fancy'
 
 " }}}
-" Python-Mode {{{
+" Rainbow Parentheses {{{
+let g:rainbow_active = 0
+"nnoremap <leader>R :SeeParentheses<cr>
+"let g:rbpt_colorpairs = [
+"    \ ['brown',       'RoyalBlue3'],
+"    \ ['Darkblue',    'SeaGreen3'],
+"    \ ['darkgray',    'DarkOrchid3'],
+"    \ ['darkgreen',   'firebrick3'],
+"    \ ['darkcyan',    'RoyalBlue3'],
+"    \ ['darkred',     'SeaGreen3'],
+"    \ ['darkmagenta', 'DarkOrchid3'],
+"    \ ['brown',       'firebrick3'],
+"    \ ['gray',        'RoyalBlue3'],
+"    \ ['black',       'SeaGreen3'],
+"    \ ['darkmagenta', 'DarkOrchid3'],
+"    \ ['Darkblue',    'firebrick3'],
+"    \ ['darkgreen',   'RoyalBlue3'],
+"    \ ['darkcyan',    'SeaGreen3'],
+"    \ ['darkred',     'DarkOrchid3'],
+"    \ ['red',         'firebrick3'],
+"    \ ]
+"let g:rbpt_max = 16
 
-let g:pymode_doc = 1
-let g:pymode_doc_key = '<localleader>ds'
-let g:pydoc = 'pydoc'
-let g:pymode_syntax = 0
-let g:pymode_run = 0
-let g:pymode_lint = 0
-let g:pymode_breakpoint = 0
-let g:pymode_utils_whitespaces = 0
-let g:pymode_virtualenv = 0
-
-let g:pymode_options_indent = 0
-let g:pymode_options_fold = 0
-let g:pymode_options_other = 0
-
-let g:pymode_rope = 1
-let g:pymode_rope_global_prefix = "<localleader>R"
-let g:pymode_rope_local_prefix = "<localleader>r"
-let g:pymode_rope_auto_project = 1
-let g:pymode_rope_enable_autoimport = 0
-let g:pymode_rope_autoimport_generate = 1
-let g:pymode_rope_autoimport_underlineds = 0
-let g:pymode_rope_codeassist_maxfixes = 10
-let g:pymode_rope_sorted_completions = 1
-let g:pymode_rope_extended_complete = 1
-let g:pymode_rope_autoimport_modules = ["os", "shutil", "datetime"]
-let g:pymode_rope_confirm_saving = 1
-let g:pymode_rope_vim_completion = 1
-let g:pymode_rope_guess_project = 1
-let g:pymode_rope_goto_def_newwin = 0
-let g:pymode_rope_always_show_complete_menu = 0
-
-" }}}
-" Rainbox Parentheses {{{
-
-nnoremap <leader>R :SeeParentheses<cr>
-let g:rbpt_colorpairs = [
-    \ ['brown',       'RoyalBlue3'],
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ['red',         'firebrick3'],
-    \ ]
-let g:rbpt_max = 16
-
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadBraces
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
+"au VimEnter * RainbowParenthesesToggle
+"au Syntax * RainbowParenthesesLoadBraces
+"au Syntax * RainbowParenthesesLoadRound
+"au Syntax * RainbowParenthesesLoadSquare
 
 command! SeeParentheses call SeeParentheses()
 function! SeeParentheses() " {{{
@@ -1507,13 +1279,8 @@ endfunction " }}}
 let g:showmarks_enable = 0
 let g:showmarks_ignore_type="hmpqr"
 " }}}
-" Sparkup {{{
-
-let g:sparkupNextMapping = '<c-s>'
-
-"}}}
 " Syntastic {{{
-
+nmap <F8> :call SyntasticCheck()<cr>
 let g:syntastic_auto_loc_list=1
 "let g:syntastic_quiet_warnings=1
 let g:syntastic_enable_signs = 1
@@ -1521,6 +1288,10 @@ let g:syntastic_disabled_filetypes = ['tex']
 "let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
 let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 "let g:syntastic_jsl_conf = '$HOME/.vim/jsl.conf'
+let g:syntastic_mode_map = {
+    \ "mode": "active",
+    \ "active_filetypes": [],
+    \ "passive_filetypes": ["haskell"] }
 
 " }}}
 " Easytag {{{
@@ -1628,26 +1399,26 @@ let g:tagbar_type_tex = {
 " }}}
 " Threesome {{{
 
-let g:threesome_leader = "-"
+"let g:threesome_leader = "-"
 
-let g:threesome_initial_mode = "grid"
+"let g:threesome_initial_mode = "grid"
 
-let g:threesome_initial_layout_grid = 1
-let g:threesome_initial_layout_loupe = 0
-let g:threesome_initial_layout_compare = 0
-let g:threesome_initial_layout_path = 0
+"let g:threesome_initial_layout_grid = 1
+"let g:threesome_initial_layout_loupe = 0
+"let g:threesome_initial_layout_compare = 0
+"let g:threesome_initial_layout_path = 0
 
-let g:threesome_initial_diff_grid = 1
-let g:threesome_initial_diff_loupe = 0
-let g:threesome_initial_diff_compare = 0
-let g:threesome_initial_diff_path = 0
+"let g:threesome_initial_diff_grid = 1
+"let g:threesome_initial_diff_loupe = 0
+"let g:threesome_initial_diff_compare = 0
+"let g:threesome_initial_diff_path = 0
 
-let g:threesome_initial_scrollbind_grid = 0
-let g:threesome_initial_scrollbind_loupe = 0
-let g:threesome_initial_scrollbind_compare = 0
-let g:threesome_initial_scrollbind_path = 0
+"let g:threesome_initial_scrollbind_grid = 0
+"let g:threesome_initial_scrollbind_loupe = 0
+"let g:threesome_initial_scrollbind_compare = 0
+"let g:threesome_initial_scrollbind_path = 0
 
-let g:threesome_wrap = "nowrap"
+"let g:threesome_wrap = "nowrap"
 
 " }}}
 " UltiSnip {{{
@@ -1658,22 +1429,13 @@ let g:threesome_wrap = "nowrap"
     let g:UltiSnipsListSnippets="<F11>"
     let g:UltiSnipsEditSplit="vertical"
 " }}}
-" VimClojure {{{
-
-let vimclojure#HighlightBuiltins = 1
-let vimclojure#ParenRainbow = 1
-let vimclojure#WantNailgun = 0
-
-" }}}
-" Vimroom {{{
-let g:vimroom_width=120
-" }}}
 " YankRing {{{
+nnoremap <silent> <F11> :YRShow<cr>
 function! YRRunAfterMaps()
     nnoremap Y :<C-U>YRYankCount 'y$'<CR>
     omap <expr> L YRMapsExpression("", "$")
     omap <expr> H YRMapsExpression("", "^")
-    let g:yankring_history_file='.yankring_history_file'
+    let g:yankring_history_dir='~/.vim/tmp/'
 endfunction
 " }}}
 " YouCompleteMe {{{
@@ -1739,28 +1501,28 @@ endfunction
 "
 " Note: If the text covered by a motion contains a newline it won't work.  Ack
 " searches line-by-line.
-
-nnoremap <silent> \a :set opfunc=<SID>AckMotion<CR>g@
-xnoremap <silent> \a :<C-U>call <SID>AckMotion(visualmode())<CR>
-
-function! s:CopyMotionForType(type)
-    if a:type ==# 'v'
-        silent execute "normal! `<" . a:type . "`>y"
-    elseif a:type ==# 'char'
-        silent execute "normal! `[v`]y"
-    endif
-endfunction
-
-function! s:AckMotion(type) abort
-    let reg_save = @@
-
-    call s:CopyMotionForType(a:type)
-
-    execute "normal! :Ack! --literal " . shellescape(@@) . "\<cr>"
-
-    let @@ = reg_save
-endfunction
-
+" 
+" nnoremap <silent> \a :set opfunc=<SID>AckMotion<CR>g@
+" xnoremap <silent> \a :<C-U>call <SID>AckMotion(visualmode())<CR>
+" 
+" function! s:CopyMotionForType(type)
+"     if a:type ==# 'v'
+"         silent execute "normal! `<" . a:type . "`>y"
+"     elseif a:type ==# 'char'
+"         silent execute "normal! `[v`]y"
+"     endif
+" endfunction
+" 
+" function! s:AckMotion(type) abort
+"     let reg_save = @@
+" 
+"     call s:CopyMotionForType(a:type)
+" 
+"     execute "normal! :Ack! --literal " . shellescape(@@) . "\<cr>"
+" 
+"     let @@ = reg_save
+" endfunction
+" 
 " }}}
 " Error toggles ----------------------------------------------------------- {{{
 
