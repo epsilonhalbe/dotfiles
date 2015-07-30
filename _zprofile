@@ -1,8 +1,4 @@
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH=$HOME/bin:$PATH
-fi
-
 if [ -d "$HOME/.rvm/bin" ] ; then
     PATH="$HOME/.rvm/bin:$PATH"
 fi
@@ -16,6 +12,10 @@ if [ -d $HOMEBINDIR ] ; then
             PATH=$dir:$PATH
         fi
     done
+fi
+
+if [ -d "$HOME/bin" ] ; then
+    PATH=$HOME/bin:$PATH
 fi
 
 VIMDIR="/opt/vim/bin/"
