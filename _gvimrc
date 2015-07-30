@@ -1,10 +1,11 @@
 "set background=light        " we are not using a dark background
-"set background=dark         " we are not using a light background
+set background=dark         " we are not using a light background
 colorscheme molokai
 "colorscheme solarized
 if (hostname() == 'LoupGarrou')
     set guifont=DejaVu\ Sans\ Mono\ 14
 endif
+
 if (hostname() == 'wendigo')
     set guifont=DejaVu\ Sans\ Mono\ 11
 endif

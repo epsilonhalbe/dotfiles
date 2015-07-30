@@ -327,9 +327,9 @@ syntax on
 
 set t_Co=256
 " set t_ut=
-    "set background=light         " we are not using a light background
-    set background=dark        " we are not using a light background
-colorscheme monokai
+    set background=light         " we are not using a light background
+    "set background=dark        " we are not using a light background
+colorscheme solarized
     "autocmd InsertEnter * highlight  CursorLine ctermbg=23 ctermfg=None
     " Revert Color to default when leaving Insert Mode
     "autocmd InsertLeave * highlight  CursorLine ctermbg=237 ctermfg=None
