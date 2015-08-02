@@ -1482,10 +1482,10 @@ function! s:NextTextObject(motion, dir)
   endif
 
   exe "normal! ".a:dir.c."v".a:motion.c
-eandfunction
+endfunction
 
 " }}}
-aaa
+
 " }}}
 " Ack motions ------------------------------------------------------------- {{{
 
@@ -1588,54 +1588,6 @@ endfunc "}}}
 nnoremap <leader>dw :call ToggleDiffWhitespace()<CR>
 
 " }}}
-
-" }}}
-" Hg ---------------------------------------------------------------------- {{{
-
-function! s:HgDiff()
-    diffthis
-
-    let fn = expand('%:p')
-    let ft = &ft
-
-    wincmd v
-    edit __hgdiff_orig__
-
-    setlocal buftype=nofile
-
-    normal ggdG
-    execute "silent r!hg cat --rev . " . fn
-    normal ggdd
-
-    execute "setlocal ft=" . ft
-
-    diffthis
-    diffupdate
-endf
-command! -nargs=0 HgDiff call s:HgDiff()
-nnoremap <leader>hd :HgDiff<cr>
-
-function! s:HgBlame()
-    let fn = expand('%:p')
-
-    wincmd v
-    wincmd h
-    edit __hgblame__
-    vertical resize 28
-
-    setlocal scrollbind winfixwidth nolist nowrap nonumber buftype=nofile ft=none
-
-    normal ggdG
-    execute "silent r!hg blame -undq " . fn
-    normal ggdd
-    execute ':%s/\v:.*$//'
-
-    wincmd l
-    setlocal scrollbind
-    syncbind
-endf
-command! -nargs=0 HgBlame call s:HgBlame()
-nnoremap <leader>hb :HgBlame<cr>
 
 " }}}
 " COLORS {{{
