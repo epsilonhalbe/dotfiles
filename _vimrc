@@ -1280,7 +1280,7 @@ let g:showmarks_enable = 0
 let g:showmarks_ignore_type="hmpqr"
 " }}}
 " Syntastic {{{
-nmap <F8> :call SyntasticCheck()<cr>
+nmap <F7> :call SyntasticCheck()<cr>
 let g:syntastic_auto_loc_list=1
 "let g:syntastic_quiet_warnings=1
 let g:syntastic_enable_signs = 1
