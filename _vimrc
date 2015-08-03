@@ -16,56 +16,47 @@ set rtp+=~/.vim/bundle/Vundle.vim/
 
 call vundle#rc()
 
-Plugin 'gmarik/Vundle.vim'
-
-"Plugin 'gerw/vim-latex-suite'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'Raimondi/delimitMate'
+Plugin 'Shougo/vimproc.vim'
+Plugin 'SirVer/ultisnips'
+Plugin 'Twinside/vim-hoogle'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'Yggdroot/indentLine'
 Plugin 'altercation/vim-colors-solarized'
-""" Haskell related Plugins
 Plugin 'bitc/lushtags'
 Plugin 'bitc/vim-hdevtools'
+Plugin 'chrisbra/NrrwRgn'
+Plugin 'coot/CRDispatcher'
+Plugin 'coot/cmdalias_vim'
+Plugin 'corntrace/bufexplorer'
 Plugin 'eagletmt/ghcmod-vim'
-"Plugin 'wlangstroth/vim-haskell'
-Plugin 'raichoo/haskell-vim'
-Plugin 'lukerandall/haskellmode-vim'
-"Plugin 'vim-scripts/haskell.vim'
-Plugin 'Twinside/vim-hoogle'
-Plugin 'ujihisa/neco-ghc'
-
-""" Language specific plugins
+Plugin 'ervandew/supertab'
+Plugin 'gmarik/Vundle.vim'
+Plugin 'godlygeek/tabular'
+Plugin 'gorodinskiy/vim-coloresque'
 Plugin 'guns/vim-clojure-static'
-Plugin 'jceb/vim-orgmode'
-Plugin 'lambdatoast/elm.vim'
-Plugin 'neo4j-contrib/cypher-vim-syntax'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'raichoo/purescript-vim'
-Plugin 'marijnh/tern_for_vim'
-
-""" making better vim experience
-Plugin 'ivalkeen/nerdtree-execute'
-Plugin 'junegunn/vim-easy-align'
 Plugin 'honza/vim-snippets'
-Plugin 'SirVer/ultisnips'
-"Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'ivalkeen/nerdtree-execute'
+Plugin 'jceb/vim-orgmode'
+Plugin 'junegunn/vim-easy-align'
+Plugin 'kurkale6ka/vim-sequence'
+Plugin 'lambdatoast/elm.vim'
+Plugin 'lukerandall/haskellmode-vim'
 Plugin 'luochen1990/rainbow'
-Plugin 'Lokaltog/vim-easymotion'
+Plugin 'majutsushi/tagbar'
+Plugin 'marijnh/tern_for_vim'
+Plugin 'mattn/calendar-vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'neo4j-contrib/cypher-vim-syntax'
+Plugin 'pangloss/vim-javascript'
+Plugin 'pbrisbin/html-template-syntax'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'raichoo/haskell-vim'
+Plugin 'raichoo/purescript-vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-"
-""" misc plugins
-Plugin 'chrisbra/NrrwRgn'
-Plugin 'coot/cmdalias_vim'
-Plugin 'coot/CRDispatcher'
-Plugin 'corntrace/bufexplorer'
-Plugin 'ervandew/supertab'
-Plugin 'godlygeek/tabular'
-Plugin 'kurkale6ka/vim-sequence'
-Plugin 'majutsushi/tagbar'
-Plugin 'mattn/calendar-vim'
-Plugin 'mileszs/ack.vim'
-Plugin 'pbrisbin/html-template-syntax'
-Plugin 'Raimondi/delimitMate'
-Plugin 'Shougo/vimproc.vim'
 Plugin 'sickill/vim-monokai'
 Plugin 'sjl/gundo.vim'
 Plugin 'terryma/vim-multiple-cursors'
@@ -81,23 +72,24 @@ Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-speeddating'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'ujihisa/neco-ghc'
 Plugin 'vim-scripts/AutomaticLaTexPlugin'
+Plugin 'vim-scripts/SyntaxRange'
+Plugin 'vim-scripts/YankRing.vim'
 Plugin 'vim-scripts/cmdalias.vim'
 Plugin 'vim-scripts/colorsel.vim'
 Plugin 'vim-scripts/renamer.vim'
 Plugin 'vim-scripts/scratch.vim'
-Plugin 'vim-scripts/SyntaxRange'
 Plugin 'vim-scripts/utl.vim'  "universal text linking
-Plugin 'vim-scripts/YankRing.vim'
 Plugin 'wincent/Command-T'
 Plugin 'xolox/vim-easytags'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-shell'
-Plugin 'Yggdroot/indentLine'
 
-"Plugin 'file:///home/epsilonhalbe/prgm/fsharpbinding-vim'
-"Plugin 'fsharp/fsharpbinding', {'rtp': '/vim'}
+if (hostname() == 'LoupGarrou')
+    Plugin 'file:///home/epsilonhalbe/util/fsharpbinding-vim'
+    Plugin 'fsharp/fsharpbinding', {'rtp': '/vim'}
+endif
 
 filetype on
 filetype indent on
@@ -1032,7 +1024,6 @@ nnoremap Ajk <nop>
 "
 " Sigh.
 " nnoremap <leader><cr> :silent !/usr/local/bin/ctags -R . && sed -i .bak -E -e '/^[^	]+	[^	]+.py	.+v$/d' tags<cr>
-"
 
 " }}}
 " Plugin settings --------------------------------------------------------- {{{
@@ -1095,7 +1086,7 @@ omap φ ;;f
 
 "nnoremap <silent> <Leader>F      :call EasyMotionF(0, 1)<CR>
 "onoremap <silent> <Leader>F      :call EasyMotionF(0, 1)<CR>
-"vnoremap <silent> <Leader>F :<C-U>call EasyMotionF(1, 1)<CR>
+"avnoremap <silent> <Leader>F :<C-U>call EasyMotionF(1, 1)<CR>
 
 "onoremap <silent> <Leader>t      :call EasyMotionT(0, 0)<CR>
 "onoremap <silent> <Leader>T      :call EasyMotionT(0, 1)<CR>
@@ -1143,9 +1134,14 @@ let g:gundo_preview_bottom = 1
 " Open the definition in a new vsplit
 nnoremap <LocalLeader>? :sp<CR>:exec("tag ".expand("<cword>"))<cr>
 
-let g:haddock_browser = "/usr/bin/chromium"
+if (!empty(glob("/usr/bin/chromium")))
+    let g:haddock_browser = "/usr/bin/chromium"
+endif
+if (!empty(glob("/usr/bin/chromium-browser")))
+    let g:haddock_browser = "/usr/bin/chromium"
+endif
+
 let g:haddock_browser_callformat = "%s %s"
-let g:haddock_docdir= "~/angebotsservice/.cabal-sandbox/share/doc/x86_64-linux-ghc-7.6.3/"
 let g:haddock_indexfiledir= "~/.vim/"
 
 " }}}
@@ -1592,172 +1588,6 @@ endfunc "}}}
 nnoremap <leader>dw :call ToggleDiffWhitespace()<CR>
 
 " }}}
-
-" }}}
-" Hg ---------------------------------------------------------------------- {{{
-
-function! s:HgDiff()
-    diffthis
-
-    let fn = expand('%:p')
-    let ft = &ft
-
-    wincmd v
-    edit __hgdiff_orig__
-
-    setlocal buftype=nofile
-
-    normal ggdG
-    execute "silent r!hg cat --rev . " . fn
-    normal ggdd
-
-    execute "setlocal ft=" . ft
-
-    diffthis
-    diffupdate
-endf
-command! -nargs=0 HgDiff call s:HgDiff()
-nnoremap <leader>hd :HgDiff<cr>
-
-function! s:HgBlame()
-    let fn = expand('%:p')
-
-    wincmd v
-    wincmd h
-    edit __hgblame__
-    vertical resize 28
-
-    setlocal scrollbind winfixwidth nolist nowrap nonumber buftype=nofile ft=none
-
-    normal ggdG
-    execute "silent r!hg blame -undq " . fn
-    normal ggdd
-    execute ':%s/\v:.*$//'
-
-    wincmd l
-    setlocal scrollbind
-    syncbind
-endf
-command! -nargs=0 HgBlame call s:HgBlame()
-nnoremap <leader>hb :HgBlame<cr>
-
-" }}}
-" Nyan! ------------------------------------------------------------------- {{{
-
-function! NyanMe() " {{{
-    hi NyanFur             guifg=#BBBBBB
-    hi NyanPoptartEdge     guifg=#ffd0ac
-    hi NyanPoptartFrosting guifg=#fd3699 guibg=#fe98ff
-    hi NyanRainbow1        guifg=#6831f8
-    hi NyanRainbow2        guifg=#0099fc
-    hi NyanRainbow3        guifg=#3cfa04
-    hi NyanRainbow4        guifg=#fdfe00
-    hi NyanRainbow5        guifg=#fc9d00
-    hi NyanRainbow6        guifg=#fe0000
-
-
-    echohl NyanRainbow1
-    echon "≈"
-    echohl NyanRainbow2
-    echon "≋"
-    echohl NyanRainbow3
-    echon "≈"
-    echohl NyanRainbow4
-    echon "≋"
-    echohl NyanRainbow5
-    echon "≈"
-    echohl NyanRainbow6
-    echon "≋"
-    echohl NyanRainbow1
-    echon "≈"
-    echohl NyanRainbow2
-    echon "≋"
-    echohl NyanRainbow3
-    echon "≈"
-    echohl NyanRainbow4
-    echon "≋"
-    echohl NyanRainbow5
-    echon "≈"
-    echohl NyanRainbow6
-    echon "≋"
-    echohl None
-    echo ""
-
-    echohl NyanRainbow1
-    echon "≈"
-    echohl NyanRainbow2
-    echon "≋"
-    echohl NyanRainbow3
-    echon "≈"
-    echohl NyanRainbow4
-    echon "≋"
-    echohl NyanRainbow5
-    echon "≈"
-    echohl NyanRainbow6
-    echon "≋"
-    echohl NyanRainbow1
-    echon "≈"
-    echohl NyanRainbow2
-    echon "≋"
-    echohl NyanRainbow3
-    echon "≈"
-    echohl NyanRainbow4
-    echon "≋"
-    echohl NyanRainbow5
-    echon "≈"
-    echohl NyanRainbow6
-    echon "≋"
-    echohl NyanFur
-    echon "╰"
-    echohl NyanPoptartEdge
-    echon "⟨"
-    echohl NyanPoptartFrosting
-    echon "⣮⣯⡿"
-    echohl NyanPoptartEdge
-    echon "⟩"
-    echohl NyanFur
-    echon "⩾^ω^⩽"
-    echohl None
-    echo ""
-
-    echohl NyanRainbow1
-    echon "≈"
-    echohl NyanRainbow2
-    echon "≋"
-    echohl NyanRainbow3
-    echon "≈"
-    echohl NyanRainbow4
-    echon "≋"
-    echohl NyanRainbow5
-    echon "≈"
-    echohl NyanRainbow6
-    echon "≋"
-    echohl NyanRainbow1
-    echon "≈"
-    echohl NyanRainbow2
-    echon "≋"
-    echohl NyanRainbow3
-    echon "≈"
-    echohl NyanRainbow4
-    echon "≋"
-    echohl NyanRainbow5
-    echon "≈"
-    echohl NyanRainbow6
-    echon "≋"
-    echohl None
-    echon " "
-    echohl NyanFur
-    echon "”   ‟"
-    echohl None
-
-    sleep 1
-    redraw
-    echo " "
-    echo " "
-    echo "Noms?"
-    redraw
-endfunction " }}}
-command! NyanMe call NyanMe()
 
 " }}}
 " COLORS {{{

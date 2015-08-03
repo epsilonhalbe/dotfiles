@@ -18,11 +18,6 @@ if [ -d "$HOME/bin" ] ; then
     PATH=$HOME/bin:$PATH
 fi
 
-VIMDIR="/opt/vim/bin/"
-if [ -d $VIMDIR ] ; then
-    PATH=$VIMDIR:$PATH
-fi
-
 OCAMLDIR="/opt/ocaml/bin/"
 if [ -d $OCAMLDIR ] ; then
     PATH=$OCAMLDIR:$PATH
