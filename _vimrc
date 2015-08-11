@@ -10,28 +10,25 @@
 " Preamble ---------------------------------------------------------------- {{{
 
 set nocompatible
-syntax on
+syntax manual
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim/
 
 call vundle#rc()
 
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'Raimondi/delimitMate'
-Plugin 'Shougo/vimproc.vim'
-Plugin 'SirVer/ultisnips'
-Plugin 'Twinside/vim-hoogle'
+Plugin 'ervandew/supertab'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'Yggdroot/indentLine'
+Plugin 'SirVer/ultisnips'
+
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'bitc/lushtags'
 Plugin 'bitc/vim-hdevtools'
 Plugin 'chrisbra/NrrwRgn'
-Plugin 'coot/CRDispatcher'
 Plugin 'coot/cmdalias_vim'
+Plugin 'coot/CRDispatcher'
 Plugin 'corntrace/bufexplorer'
 Plugin 'eagletmt/ghcmod-vim'
-Plugin 'ervandew/supertab'
+Plugin 'eagletmt/neco-ghc'
 Plugin 'gmarik/Vundle.vim'
 Plugin 'godlygeek/tabular'
 Plugin 'gorodinskiy/vim-coloresque'
@@ -42,21 +39,26 @@ Plugin 'jceb/vim-orgmode'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'kurkale6ka/vim-sequence'
 Plugin 'lambdatoast/elm.vim'
+Plugin 'Lokaltog/vim-easymotion'
 Plugin 'lukerandall/haskellmode-vim'
 Plugin 'luochen1990/rainbow'
 Plugin 'majutsushi/tagbar'
 Plugin 'marijnh/tern_for_vim'
 Plugin 'mattn/calendar-vim'
 Plugin 'mileszs/ack.vim'
+Plugin 'moll/vim-node'
 Plugin 'neo4j-contrib/cypher-vim-syntax'
+Plugin 'neovimhaskell/haskell-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'pbrisbin/html-template-syntax'
 Plugin 'plasticboy/vim-markdown'
-Plugin 'raichoo/haskell-vim'
+Bundle 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'raichoo/purescript-vim'
+Plugin 'Raimondi/delimitMate'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
+Plugin 'Shougo/vimproc.vim'
 Plugin 'sickill/vim-monokai'
 Plugin 'sjl/gundo.vim'
 Plugin 'terryma/vim-multiple-cursors'
@@ -72,19 +74,20 @@ Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-speeddating'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
-Plugin 'ujihisa/neco-ghc'
+Plugin 'Twinside/vim-hoogle'
 Plugin 'vim-scripts/AutomaticLaTexPlugin'
-Plugin 'vim-scripts/SyntaxRange'
-Plugin 'vim-scripts/YankRing.vim'
 Plugin 'vim-scripts/cmdalias.vim'
 Plugin 'vim-scripts/colorsel.vim'
 Plugin 'vim-scripts/renamer.vim'
 Plugin 'vim-scripts/scratch.vim'
+Plugin 'vim-scripts/SyntaxRange'
 Plugin 'vim-scripts/utl.vim'  "universal text linking
+Plugin 'vim-scripts/YankRing.vim'
 Plugin 'wincent/Command-T'
 Plugin 'xolox/vim-easytags'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-shell'
+Plugin 'Yggdroot/indentLine'
 
 if (hostname() == 'LoupGarrou')
     Plugin 'file:///home/epsilonhalbe/util/fsharpbinding-vim'
@@ -111,13 +114,15 @@ set backspace=indent,eol,start
 set number
 set relativenumber
 set tabpagemax=30
-set statusline=
-set statusline+=%f\ %2*%m\ %1*%h
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%{fugitive#statusline()}
-set statusline+=%*
+"set statusline=
+"set statusline+=%f\ %2*%m\ %1*%h
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%{fugitive#statusline()}
+"set statusline+=%*
 set laststatus=2
+set term=xterm-256color
+set termencoding=utf-8
 set history=2000
 set undofile
 set undoreload=2000
@@ -152,9 +157,7 @@ set viminfo='10,\"100,:20,%,n~/.viminfo
 set viminfo+=!                                       " make sure it can save viminfo
 set cf                                               " enable error files and error jumping
 set ffs=unix,dos,mac
-set iskeyword+=$,@,%,#,-
-set iskeyword+=ä,ü,ö,ß,é,è,ê,â,á,à,û                 " none of these should be word dividers, so make them not be
-set iskeyword+=_,.,39
+set iskeyword=@,48-57,_,192-255,$,@,%,#,-,ä,ü,ö,ß,é,è,ê,â,á,à,û                 " none of these should be word dividers, so make them not be
 set title                                            " show title in xterm
 "set shortmess=atI                                   " shorten command-line text and other info tokens (see :help shortmess)
 set nojoinspaces
@@ -162,7 +165,7 @@ set cmdheight=1
 "set scrolloff=5                                     " vertical scrolloff
 set scrolloff=999                                    " vertical scrolloff if set to 999 cursor is always in the middle of the screen
 set sidescroll=1
-set sidescrolloff=50                                  " horzontal scrolloff
+set sidescrolloff=30                                 " horzontal scrolloff
 
 
 " Wildmenu completion {{{
@@ -314,7 +317,6 @@ inoremap :}  <esc>:w<cr>
 
 " }}}
 " Color scheme {{{
-
 syntax on
 
 set t_Co=256
@@ -471,6 +473,7 @@ noremap <S-Down> 10j
 inoremap <S-Up> <Esc><Up>
 inoremap <S-Down> <Esc><Up>
 
+"nnoremap <C-w><C-w> :set syntax=OFF<cr><C-w><C-w>:set syntax=ON<cr>
 " Window moving around
 nnoremap <c-space> <C-w>
 " Window resizing
@@ -479,7 +482,6 @@ nnoremap <c-right> 3<c-w><
 nnoremap <c-up> <c-w>+
 nnoremap <c-down> <c-w>-
 
-nmap <C-}> <C-w><C-]>
 " Easier to type, and I never use the default behavior.
 "noremap H ^
 "noremap L g_
@@ -686,7 +688,7 @@ augroup END
 augroup ft_haskell
     au!
     au BufEnter *.hs compiler ghc
-    au BufEnter *.lhs compiler tex
+    "au BufEnter *.lhs compiler tex
     let g:syntastic_haskell_checkers = ['ghc_mod', 'hlint', 'hdevtools']
     let g:syntastic_haskell_hdevtools_args='-g-isrc -g-Wall'
     let g:ghc="~/bin/ghc/ghc"
@@ -706,8 +708,9 @@ augroup ft_haskell
     endfunction
 
     let g:hdevtools_options = '-g-ilib -g-isrc -g-i. -g-idist/build/autogen -g-Wall -g-package-conf='.FindCabalSandboxRootPackageConf()
+    autocmd BufEnter *.hs let b:ghc_staticoptions = '-no-user-package-db -package-db '.FindCabalSandboxRootPackageConf()
 
-
+    nmap <localleader>? :echo "Haddock index disabled"<cr>
     autocmd BufEnter *.hs set formatprg=pointfree
     let g:indentLine_enabled =0
     let hs_highlight_types = 1
@@ -719,7 +722,7 @@ augroup ft_haskell
     "let b:tex_flavor = 'xelatex'
     au FileType haskell setlocal omnifunc=necoghc#omnifunc
     let g:necoghc_enable_detailed_browse = 1
-    set makeprg=cabal\ build
+    "set makeprg=cabal\ build
     setlocal errorformat=%f:%l:\ %m
 augroup END
 
@@ -739,6 +742,7 @@ augroup ft_javascript
     au FileType javascript setlocal foldmarker={,}
     au FileType javascript setlocal shiftwidth=4
     let g:syntastic_javascript_checkers=['eslint']
+    setlocal iskeyword+=\'
     " Make {<cr> insert a pair of brackets in such a way that the cursor is correctly
     " positioned inside of them AND the following code doesn't get unfolded.
     "au Filetype javascript inoremap <buffer> {<cr> {}<left><cr><space><space><space><space>.<cr><esc>kA<bs>
@@ -832,6 +836,12 @@ function FT_mail()
     set fileencodings=iso8859-1,utf-8
     " abbreviations
 endfunction
+" }}}
+" Quickfix window {{{
+augroup ft_quickfix
+    autocmd!
+    autocmd FileType qf setlocal wrap
+augroup END
 " }}}
 " }}}
 " Quick editing ----------------------------------------------------------- {{{
@@ -1132,15 +1142,16 @@ let g:gundo_preview_bottom = 1
 " Haskellmode {{{
 
 " Open the definition in a new vsplit
-nnoremap <LocalLeader>? :sp<CR>:exec("tag ".expand("<cword>"))<cr>
+"nnoremap <LocalLeader>? :sp<CR>:exec("tag ".expand("<cword>"))<cr>
 
 if (!empty(glob("/usr/bin/chromium")))
     let g:haddock_browser = "/usr/bin/chromium"
 endif
 if (!empty(glob("/usr/bin/chromium-browser")))
-    let g:haddock_browser = "/usr/bin/chromium"
+    let g:haddock_browser = "/usr/bin/chromium-browser"
 endif
 
+let g:ghc_symbolcache=1
 let g:haddock_browser_callformat = "%s %s"
 let g:haddock_indexfiledir= "~/.vim/"
 
@@ -1439,9 +1450,22 @@ endfunction
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:SuperTabDefaultCompletionType = '<C-n>'
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_semantic_triggers = {'haskell' : ['.']}
+let g:ycm_autoclose_preview_window_after_completion = 0
+let g:ycm_confirm_extra_conf = 1
+let g:ycm_semantic_triggers =  {
+  \   'c' : ['->', '.'],
+  \   'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
+  \             're!\[.*\]\s'],
+  \   'ocaml' : ['.', '#'],
+  \   'cpp,objcpp' : ['->', '.', '::'],
+  \   'perl' : ['->'],
+  \   'php' : ['->', '::'],
+  \   'cs,java,javascript,typescript,d,python,perl6,scala,vb,elixir,go' : ['.'],
+  \   'ruby' : ['.', '::'],
+  \   'lua' : ['.', ':'],
+  \   'erlang' : [':'],
+  \   'haskell' : ['.'],
+  \ }
 " }}}
 
 " }}}

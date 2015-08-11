@@ -3,11 +3,11 @@ set background=dark         " we are not using a light background
 colorscheme molokai
 "colorscheme solarized
 if (hostname() == 'LoupGarrou')
-    set guifont=DejaVu\ Sans\ Mono\ 14
+    set guifont=DejaVu\ Sans\ Mono\ 11
 endif
 
 if (hostname() == 'wendigo')
-    set guifont=DejaVu\ Sans\ Mono\ 11
+    set guifont=Inconsolata-g\ for\ Powerline\ Medium\ 11
 endif
 
 set mousehide
@@ -34,38 +34,34 @@ highlight SpellCap    term=reverse   ctermbg=9  gui=undercurl guisp=Blue      " 
 highlight SpellRare   term=reverse   ctermbg=13 gui=undercurl guisp=Magenta   " rare word
 highlight SpellLocale term=underline ctermbg=11 gui=undercurl guisp=DarkCyan  " word only exists in other region
 
+highlight Specialkey guifg=DarkTurquoise
 
 "hi ConId term=bold guifg=DeepSkyBlue1 gui=bold
 "hi Type  term=bold guifg=DeepSkyBlue1 gui=bold
 "
 " ToggleBlinkCursor {{{
 
-nmap <F1> :call BlinkCursorToggle()<cr>
+nmap <F1> :call HlToggle()<cr>
 
-func BlinkCursorToggle()
-    if !exists('g:BlinkCursor')
-        call BlinkCursorOn()
+func HlToggle()
+    if !exists('b:Hl')
+        call HlOn()
     else
-        call BlinkCursorOff()
+        call HlOff()
     endif
 endfunc
 
-func BlinkCursorOn()
-    let g:BlinkCursor=1
-    set guicursor+=n:blinkon300
-    highlight CursorLine guibg=LawnGreen
-    echo "Blink ▸ On"
+func! HlOn()
+    let b:Hl=1
+        set syntax=ON
+    echo "Syntax ▸ On"
 endfunc
 
-func BlinkCursorOff()
-    if exists('g:BlinkCursor')
-        unlet g:BlinkCursor
-        highlight CursorLine term=underline cterm=underline guibg=#293739
-        set guicursor=n-v-c:block-Cursor
-        set guicursor+=i:ver100-iCursor
-        set guicursor+=n-v-c:blinkon0
-        set guicursor+=i:blinkwait0
-    echo "Blink ▸ Off"
+func! HlOff()
+    if exists('b:Hl')
+        unlet b:Hl
+        set syntax=OFF
+        echo "Syntax ▸ Off"
     endif
 endfunc
 " }}}
