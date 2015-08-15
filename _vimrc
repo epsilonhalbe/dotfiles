@@ -833,6 +833,9 @@ function FT_mail()
     " abbreviations
 endfunction
 " }}}
+" QFix window/LocList{{{
+au FileType qf setlocal wrap
+" }}}
 " }}}
 " Quick editing ----------------------------------------------------------- {{{
 
@@ -1285,9 +1288,9 @@ let g:syntastic_disabled_filetypes = ['tex']
 let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 "let g:syntastic_jsl_conf = '$HOME/.vim/jsl.conf'
 let g:syntastic_mode_map = {
-    \ "mode": "active",
+    \ "mode": "passive",
     \ "active_filetypes": [],
-    \ "passive_filetypes": ["haskell"] }
+    \ "passive_filetypes": [] }
 
 " }}}
 " Easytag {{{
@@ -1590,6 +1593,22 @@ nnoremap <leader>dw :call ToggleDiffWhitespace()<CR>
 " }}}
 
 " }}}
+
+" ADJUST PATH {{{
+if (index(split($PATH,':'),'/home/epsilonhalbe/bin') < 0)
+    let $PATH = '/home/epsilonhalbe/bin' . ':' . $PATH
+endif
+if (index(split($PATH,':'),'/home/epsilonhalbe/bin/ghc') < 0)
+    let $PATH = '/home/epsilonhalbe/bin/ghc' . ':' . $PATH
+endif
+if (index(split($PATH,':'),'/home/epsilonhalbe/bin/elm') < 0)
+    let $PATH = '/home/epsilonhalbe/bin/elm' . ':' . $PATH
+endif
+if (index(split($PATH,':'),'/home/epsilonhalbe/bin/util') < 0)
+    let $PATH = '/home/epsilonhalbe/bin/util' . ':' . $PATH
+endif
+" }}}
+"
 " COLORS {{{
 
 hi x016_Grey0             ctermfg=16  guifg=#000000 "rgb=0,0,0

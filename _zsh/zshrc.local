@@ -77,7 +77,8 @@ function pdfsearch()
 # }}}
 layout=$(setxkbmap  -query | grep "layout"  | cut -d' ' -f6 )
 variant=$(setxkbmap -query | grep "variant" | cut -d' ' -f5 )
-if [[ ! ($DISPLAY  && ($layout == "de") && $variant == "neo") ]]; then
+
+if [[ ! (( $layout == "de" ) && ( $variant == "neo" )) ]]; then
     setxkbmap de neo
 fi
 
@@ -105,7 +106,7 @@ function chpwd {
         (*alias*) unalias runhaskell;;
     esac
     cabal_files=(*.cabal(N))
-    if [[ $#cabal_files -gt 0 &&  -f cabal.sandbox.config ]]; then
+    if [[ ($#cabal_files -gt 0) &&  (-f cabal.sandbox.config) ]]; then
         alias ghc="ghc -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
         alias ghci="ghci -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
         alias runhaskell="runhaskell -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
