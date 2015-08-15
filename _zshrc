@@ -2445,7 +2445,7 @@ fi
 # do we have GNU ls with color-support?
 if [[ "$TERM" != dumb ]]; then
     #a1# List files with colors (\kbd{ls \ldots})
-    alias ls="command ls ${ls_options:+${ls_options[*]}}"
+    alias ls="command ls --group-directories-first ${ls_options:+${ls_options[*]}}"
     #a1# List all files, with colors (\kbd{ls -la \ldots})
     alias la="command ls -la ${ls_options:+${ls_options[*]}}"
     #a1# List files with long colored list, without dotfiles (\kbd{ls -l \ldots})

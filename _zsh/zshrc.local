@@ -50,6 +50,9 @@ alias o='xdg-open'
 alias .vimrc='vim ~/.vimrc'
 alias .zshrc='vim ~/.zshrc'
 alias music='mpc -p 6601'
+alias ghc-sandbox="ghc -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
+alias ghci-sandbox="ghci -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
+alias runhaskell-sandbox="runhaskell -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
 
 alias g="ghci"
 
@@ -81,12 +84,19 @@ variant=$(setxkbmap -query | grep "variant" | cut -d' ' -f5 )
 if [[ ! (( $layout == "de" ) && ( $variant == "neo" )) ]]; then
     setxkbmap de neo
 fi
-
+autoload -U colors && colors
 function cabal_sandbox_info() {
     cabal_files=(*.cabal(N))
     if [ $#cabal_files -gt 0 ]; then
         if [ -f cabal.sandbox.config ]; then
-            echo "%{$fg[green]%}sandboxed%{$reset_color%}"
+            ghc_version=`ghc --version | rev | cut -d' ' -f 1 | rev`
+            ghc_loc=`ls .cabal-sandbox | grep ghc | cut -d'-' -f 4 | grep $ghc_version`
+            if [ $ghc_loc ]; then
+                echo "%{$fg[green]%}[$ghc_version]%{$reset_color%}"
+            else
+                ghc_version=`ls .cabal-sandbox | grep ghc | cut -d'-' -f 4 | xargs`
+                echo  "%{$fg[red]%}[$ghc_version]%{$reset_color%}"
+            fi
         else
             echo "%{$fg[red]%}not sandboxed%{$reset_color%}"
         fi
@@ -95,23 +105,23 @@ function cabal_sandbox_info() {
 
 RPROMPT="\$(cabal_sandbox_info) $RPROMPT"
 
-function chpwd {
-    case $(type ghc) in
-        (*alias*) unalias ghc;;
-    esac
-    case $(type ghci) in
-        (*alias*) unalias ghci;;
-    esac
-    case $(type runhaskell) in
-        (*alias*) unalias runhaskell;;
-    esac
-    cabal_files=(*.cabal(N))
-    if [[ ($#cabal_files -gt 0) &&  (-f cabal.sandbox.config) ]]; then
-        alias ghc="ghc -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
-        alias ghci="ghci -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
-        alias runhaskell="runhaskell -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
-    fi
-}
+#function chpwd {
+#    case $(type ghc) in
+#        (*alias*) unalias ghc;;
+#    esac
+#    case $(type ghci) in
+#        (*alias*) unalias ghci;;
+#    esac
+#    case $(type runhaskell) in
+#        (*alias*) unalias runhaskell;;
+#    esac
+#    cabal_files=(*.cabal(N))
+#    if [[ $#cabal_files -gt 0 &&  -f cabal.sandbox.config ]]; then
+#        alias ghc="ghc -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
+#        alias ghci="ghci -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
+#        alias runhaskell="runhaskell -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
+#    fi
+#}
 
 ## END OF FILE #################################################################
 # vim:filetype=zsh foldmethod=marker autoindent expandtab shiftwidth=4
