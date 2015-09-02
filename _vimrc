@@ -83,7 +83,7 @@ Plugin 'vim-scripts/scratch.vim'
 Plugin 'vim-scripts/SyntaxRange'
 Plugin 'vim-scripts/utl.vim'  "universal text linking
 Plugin 'vim-scripts/YankRing.vim'
-Plugin 'wincent/Command-T'
+Plugin 'kien/ctrlp.vim'
 Plugin 'xolox/vim-easytags'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-shell'
@@ -140,7 +140,7 @@ set matchtime=3
 "set breakindent
 set showbreak=\ \ \ ↪
 "set splitbelow
-set splitright
+"set splitright
 set fillchars=diff:⣿
 "set   ttimeout
 "set  notimeout
@@ -201,6 +201,9 @@ set wildignore+=*.orig                            " Merge resolution files
 " Clojure/Leiningen
 set wildignore+=classes
 set wildignore+=lib
+
+" node modules
+set wildignore+=*/node_modules/**
 
 " }}}
 
@@ -708,9 +711,10 @@ augroup ft_haskell
     endfunction
 
     let g:hdevtools_options = '-g-ilib -g-isrc -g-i. -g-idist/build/autogen -g-Wall -g-package-conf='.FindCabalSandboxRootPackageConf()
-    autocmd BufEnter *.hs let b:ghc_staticoptions = '-no-user-package-db -package-db '.FindCabalSandboxRootPackageConf()
+    autocmd BufEnter *.hs let b:ghc_staticoptions = '-ilib -isrc -no-user-package-db -package-db '.FindCabalSandboxRootPackageConf()
+    autocmd BufEnter *.hs let b:ghcmod_ghc_options= ['-ilib','-isrc','-no-user-package-db', '-package-db '.FindCabalSandboxRootPackageConf() ]
 
-    nmap <localleader>? :echo "Haddock index disabled"<cr>
+    nmap <localleader>? yiw:Hoogle <C-R>"<cr>
     autocmd BufEnter *.hs set formatprg=pointfree
     let g:indentLine_enabled =0
     let hs_highlight_types = 1
@@ -1296,9 +1300,9 @@ let g:syntastic_disabled_filetypes = ['tex']
 let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 "let g:syntastic_jsl_conf = '$HOME/.vim/jsl.conf'
 let g:syntastic_mode_map = {
-    \ "mode": "active",
-    \ "active_filetypes": [],
-    \ "passive_filetypes": ["haskell"] }
+    \ "mode": "passive",
+    \ "active_filetypes": ['javascript'],
+    \ "passive_filetypes": [] }
 
 " }}}
 " Easytag {{{
