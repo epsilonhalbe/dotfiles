@@ -80,7 +80,8 @@ function pdfsearch()
 # }}}
 layout=$(setxkbmap  -query | grep "layout"  | cut -d' ' -f6 )
 variant=$(setxkbmap -query | grep "variant" | cut -d' ' -f5 )
-if [[ ! ($DISPLAY  && ($layout == "de") && $variant == "neo") ]]; then
+
+if [[ ! (( $layout == "de" ) && ( $variant == "neo" )) ]]; then
     setxkbmap de neo
 fi
 autoload -U colors && colors

@@ -165,7 +165,7 @@ set cmdheight=1
 "set scrolloff=5                                     " vertical scrolloff
 set scrolloff=999                                    " vertical scrolloff if set to 999 cursor is always in the middle of the screen
 set sidescroll=1
-set sidescrolloff=30                                 " horzontal scrolloff
+set sidescrolloff=50                                  " horzontal scrolloff
 
 
 " Wildmenu completion {{{
@@ -476,7 +476,6 @@ noremap <S-Down> 10j
 inoremap <S-Up> <Esc><Up>
 inoremap <S-Down> <Esc><Up>
 
-"nnoremap <C-w><C-w> :set syntax=OFF<cr><C-w><C-w>:set syntax=ON<cr>
 " Window moving around
 nnoremap <c-space> <C-w>
 " Window resizing
@@ -710,9 +709,9 @@ augroup ft_haskell
         return glob(FindCabalSandboxRoot().'/*-packages.conf.d')
     endfunction
 
-    let g:hdevtools_options = '-g-ilib -g-isrc -g-i. -g-idist/build/autogen -g-Wall -g-package-conf='.FindCabalSandboxRootPackageConf()
-    autocmd BufEnter *.hs let b:ghc_staticoptions = '-ilib -isrc -no-user-package-db -package-db '.FindCabalSandboxRootPackageConf()
-    autocmd BufEnter *.hs let b:ghcmod_ghc_options= ['-ilib','-isrc','-no-user-package-db', '-package-db '.FindCabalSandboxRootPackageConf() ]
+    let g:hdevtools_options = '-g-itst -g-ilib -g-isrc -g-i. -g-idist/build/autogen -g-Wall -g-package-conf='.FindCabalSandboxRootPackageConf()
+    autocmd BufEnter *.hs let b:ghc_staticoptions = '-itst -ilib -isrc -no-user-package-db -package-db '.FindCabalSandboxRootPackageConf()
+    autocmd BufEnter *.hs let b:ghcmod_ghc_options= ['-itst','-ilib','-isrc','-no-user-package-db', '-package-db '.FindCabalSandboxRootPackageConf() ]
 
     nmap <localleader>? yiw:Hoogle <C-R>"<cr>
     autocmd BufEnter *.hs set formatprg=pointfree
@@ -1300,8 +1299,8 @@ let g:syntastic_disabled_filetypes = ['tex']
 let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 "let g:syntastic_jsl_conf = '$HOME/.vim/jsl.conf'
 let g:syntastic_mode_map = {
-    \ "mode": "passive",
-    \ "active_filetypes": ['javascript'],
+    \ "mode": "active",
+    \ "active_filetypes": [],
     \ "passive_filetypes": [] }
 
 " }}}
@@ -1618,6 +1617,22 @@ nnoremap <leader>dw :call ToggleDiffWhitespace()<CR>
 " }}}
 
 " }}}
+
+" ADJUST PATH {{{
+if (index(split($PATH,':'),'/home/epsilonhalbe/bin') < 0)
+    let $PATH = '/home/epsilonhalbe/bin' . ':' . $PATH
+endif
+if (index(split($PATH,':'),'/home/epsilonhalbe/bin/ghc') < 0)
+    let $PATH = '/home/epsilonhalbe/bin/ghc' . ':' . $PATH
+endif
+if (index(split($PATH,':'),'/home/epsilonhalbe/bin/elm') < 0)
+    let $PATH = '/home/epsilonhalbe/bin/elm' . ':' . $PATH
+endif
+if (index(split($PATH,':'),'/home/epsilonhalbe/bin/util') < 0)
+    let $PATH = '/home/epsilonhalbe/bin/util' . ':' . $PATH
+endif
+" }}}
+"
 " COLORS {{{
 
 hi x016_Grey0             ctermfg=16  guifg=#000000 "rgb=0,0,0
