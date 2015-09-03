@@ -43,6 +43,7 @@ xmonad/*
 *.un~
 _vim/tmp/
 _vim/bundle/
+_vim/haskellmode.config
 
 # Emacs #
 *~
