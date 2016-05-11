@@ -24,6 +24,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'bitc/lushtags'
 Plugin 'bitc/vim-hdevtools'
 Plugin 'chrisbra/NrrwRgn'
+Plugin 'chrisbra/unicode.vim'
 Plugin 'coot/cmdalias_vim'
 Plugin 'coot/CRDispatcher'
 Plugin 'corntrace/bufexplorer'
@@ -165,7 +166,7 @@ set cmdheight=1
 "set scrolloff=5                                     " vertical scrolloff
 set scrolloff=999                                    " vertical scrolloff if set to 999 cursor is always in the middle of the screen
 set sidescroll=1
-set sidescrolloff=50                                  " horzontal scrolloff
+set sidescrolloff=5                                  " horzontal scrolloff
 
 
 " Wildmenu completion {{{
@@ -326,7 +327,7 @@ set t_Co=256
 " set t_ut=
     set background=light         " we are not using a light background
     "set background=dark        " we are not using a light background
-colorscheme solarized
+colorscheme molokai
     "autocmd InsertEnter * highlight  CursorLine ctermbg=23 ctermfg=None
     " Revert Color to default when leaving Insert Mode
     "autocmd InsertLeave * highlight  CursorLine ctermbg=237 ctermfg=None
@@ -1150,6 +1151,9 @@ let g:gundo_preview_bottom = 1
 if (!empty(glob("/usr/bin/chromium")))
     let g:haddock_browser = "/usr/bin/chromium"
 endif
+if (!empty(glob("/usr/bin/chrome")))
+    let g:haddock_browser = "/usr/bin/chrome"
+endif
 if (!empty(glob("/usr/bin/chromium-browser")))
     let g:haddock_browser = "/usr/bin/chromium-browser"
 endif
@@ -1207,14 +1211,14 @@ au Filetype nerdtree setlocal nolist
 "au Filetype nerdtree setlocal sidescrolloff=0
 
 let NERDTreeHighlightCursorline=1
-let NERDTreeIgnore =['\~$','.*\.pyc$', 'pip-log\.txt$', 'whoosh_index']
-let NERDTreeIgnore+=['xapian_index','.*.pid', 'monitor.py', '.*-fixtures-.*.json']
-let NERDTreeIgnore+=['.*\.o$', 'db.db','.hi']
+let NERDTreeIgnore =['\~$','\.pyc$', 'pip-log\.txt$', 'whoosh_index$']
+let NERDTreeIgnore+=['xapian_index$','.*.pid$', 'monitor.py$', '.*-fixtures-.*.json$']
+let NERDTreeIgnore+=['\.o$', 'db.db$','.hi$']
 let NERDTreeIgnore+=['\.aux$' , '\.bbl$' , '\.blg$' , '\.dvi$' , '\.nls$' ]
 let NERDTreeIgnore+=['\.glg$' , '\.glo$' , '\.gls$' , '\.idx$' , '\.fls$' ]
 let NERDTreeIgnore+=['\.ilg$' , '\.ind$' , '\.ist$' , '\.log$' , '\.nlo$' ]
-let NERDTreeIgnore+=['\.out$' , '\.toc$' , '\.dpth' , '\._aux$', '\._log$']
-let NERDTreeIgnore+=['\.tdo$' , '\.synctex.gz' ,'\.fdb_latexmk$' ,'\.auxlock$']
+let NERDTreeIgnore+=['\.out$' , '\.toc$' , '\.dpth$' , '\._aux$', '\._log$']
+let NERDTreeIgnore+=['\.tdo$' , '\.synctex.gz$' ,'\.fdb_latexmk$' ,'\.auxlock$']
 "let NERDTreeIgnore+=['\.class']
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1

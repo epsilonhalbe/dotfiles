@@ -84,6 +84,10 @@ variant=$(setxkbmap -query | grep "variant" | cut -d' ' -f5 )
 if [[ ! (( $layout == "de" ) && ( $variant == "neo" )) ]]; then
     setxkbmap de neo
 fi
+
+autoload -U +X bashcompinit && bashcompinit
+eval "$(stack --bash-completion-script stack)"
+
 autoload -U colors && colors
 function haskell_info() {
     cabal_files=(*.cabal(N))

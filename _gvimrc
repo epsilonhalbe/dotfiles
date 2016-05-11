@@ -10,6 +10,10 @@ if (hostname() == 'wendigo')
     set guifont=Inconsolata-g\ for\ Powerline\ Medium\ 11
 endif
 
+if (hostname() == 'kitsune')
+    set guifont=Inconsolata-g\ for\ Powerline\ Medium\ 11
+endif
+
 set mousehide
 set mouse=c
 set showtabline=2
