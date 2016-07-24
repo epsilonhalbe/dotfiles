@@ -4,14 +4,32 @@ snippet --scprop "Small Check Property" w
 --scprop${0}
 endsnippet
 
+snippet [--scprop "Small Check Property" w
+[ SC.testProperty "${1:description}" $
+    \\${2:param} -> ${3:function} ($2 :: ${4:Type}) == ${5:function} $2
+--scprop${0}
+endsnippet
+
 snippet --qcprop "Quick Check Property" w
 , QC.testProperty "${1:description}" $
     \\${2:param} -> ${3:function} ($2 :: ${4:Type}) == ${5:function} $2
 --qcprop${0}
 endsnippet
 
+snippet [--qcprop "Quick Check Property" w
+[ QC.testProperty "${1:description}" $
+    \\${2:param} -> ${3:function} ($2 :: ${4:Type}) == ${5:function} $2
+--qcprop${0}
+endsnippet
+
 snippet --hunit "HUnit Test" w
 , testCase "${1:description}" $
+    ${2:function} ${3:param} @?= ${4:exp result}
+--hunit${0}
+endsnippet
+
+snippet [--hunit "HUnit Test" w
+[ testCase "${1:description}" $
     ${2:function} ${3:param} @?= ${4:exp result}
 --hunit${0}
 endsnippet

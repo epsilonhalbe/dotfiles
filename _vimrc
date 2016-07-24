@@ -281,6 +281,7 @@ set textwidth=80
 "set formatoptions=qrn1
 set formatoptions=tcrqnjv
 set colorcolumn=+1
+" }}}
 
 " Backups {{{
 
@@ -325,7 +326,7 @@ syntax on
 
 set t_Co=256
 " set t_ut=
-    set background=light         " we are not using a light background
+    "set background=light         " we are not using a light background
     "set background=dark        " we are not using a light background
 colorscheme molokai
     "autocmd InsertEnter * highlight  CursorLine ctermbg=23 ctermfg=None
@@ -715,7 +716,6 @@ augroup ft_haskell
     autocmd BufEnter *.hs let b:ghcmod_ghc_options= ['-itst','-ilib','-isrc','-no-user-package-db', '-package-db '.FindCabalSandboxRootPackageConf() ]
 
     nmap <localleader>? yiw:Hoogle <C-R>"<cr>
-    autocmd BufEnter *.hs set formatprg=pointfree
     let g:indentLine_enabled =0
     let hs_highlight_types = 1
     let hs_highlight_delimiters = 1
@@ -785,18 +785,18 @@ augroup ft_tex
    "ATP messes with spell checking - great
     au FileType tex nnoremap ]= ]sz=
     au FileType tex nnoremap [= [sz=;
-   "au FileType tex setlocal foldmethod=marker foldmarker=\\begin\{,\\end\{
-   "ab α $α$                        ab κ $κ$    ab Γ $Γ$| 
-   "ab β $β$    ab σ $σ$|           ab 𝓚 $𝓚$    ab Δ $Δ$| 
-   "ab γ $γ$    ab ς $ς$|           ab 𝓚 $𝓚$    ab Δ $Δ$| 
-   "ab δ $δ$    ab τ $τ$|           ab λ $λ$    ab Θ $Θ$| 
-   "ab ∊ $∊$    ab υ $υ$|           ab μ $μ$    ab Λ $Λ$| 
-   "ab ε $ε$    ab φ $φ$|           ab ν $ν$    ab Ξ $Ξ$| 
-   "ab ζ $ζ$    ab ϕ $ϕ$|           ab ξ $ξ$    ab Π $Π$| 
-   "ab η $η$    ab χ $χ$|           ab π $π$    ab Υ $Υ$| 
-   "ab θ $θ$    ab ψ $ψ$|           ab ϖ $ϖ$    ab Φ $Φ$| 
-   "ab ϑ $ϑ$    ab ω $ω$|           ab ρ $ρ$    ab Ψ $Ψ$| 
-   "ab ι $ι$    ab Γ $Γ$|           ab ϱ $ϱ$    ab Ω $Ω$| 
+   "au FileType tex setlocal foldmethod=marker foldmarker=\\begin\{,\\end\{"
+   "ab α $α$                        ab κ $κ$    ab Γ $Γ$|                  "
+   "ab β $β$    ab σ $σ$|           ab 𝓚 $𝓚$    ab Δ $Δ$|                  "
+   "ab γ $γ$    ab ς $ς$|           ab 𝓚 $𝓚$    ab Δ $Δ$|                  "
+   "ab δ $δ$    ab τ $τ$|           ab λ $λ$    ab Θ $Θ$|                  "
+   "ab ∊ $∊$    ab υ $υ$|           ab μ $μ$    ab Λ $Λ$|                  "
+   "ab ε $ε$    ab φ $φ$|           ab ν $ν$    ab Ξ $Ξ$|                  "
+   "ab ζ $ζ$    ab ϕ $ϕ$|           ab ξ $ξ$    ab Π $Π$|                  "
+   "ab η $η$    ab χ $χ$|           ab π $π$    ab Υ $Υ$|                  "
+   "ab θ $θ$    ab ψ $ψ$|           ab ϖ $ϖ$    ab Φ $Φ$|                  "
+   "ab ϑ $ϑ$    ab ω $ω$|           ab ρ $ρ$    ab Ψ $Ψ$|                  "
+   "ab ι $ι$    ab Γ $Γ$|           ab ϱ $ϱ$    ab Ω $Ω$|                  "
 
 augroup END
 
@@ -1067,7 +1067,6 @@ aug END
 
 " }}}
 " Ctrl-P {{{
-
 let g:ctrlp_map = '<leader>,'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_window_reversed = 1
@@ -1083,7 +1082,6 @@ let g:ctrlp_prompt_mappings = {
 let g:ctrlp_extensions = ['tag']
 
 nnoremap <leader>. :CtrlPTag<cr>
-
 " }}}
 " Easymotion {{{
 nmap f ;;f
@@ -1528,10 +1526,10 @@ endfunction
 "
 " Note: If the text covered by a motion contains a newline it won't work.  Ack
 " searches line-by-line.
-" 
+"
 " nnoremap <silent> \a :set opfunc=<SID>AckMotion<CR>g@
 " xnoremap <silent> \a :<C-U>call <SID>AckMotion(visualmode())<CR>
-" 
+"
 " function! s:CopyMotionForType(type)
 "     if a:type ==# 'v'
 "         silent execute "normal! `<" . a:type . "`>y"
@@ -1539,17 +1537,17 @@ endfunction
 "         silent execute "normal! `[v`]y"
 "     endif
 " endfunction
-" 
+"
 " function! s:AckMotion(type) abort
 "     let reg_save = @@
-" 
+"
 "     call s:CopyMotionForType(a:type)
-" 
+"
 "     execute "normal! :Ack! --literal " . shellescape(@@) . "\<cr>"
-" 
+"
 "     let @@ = reg_save
 " endfunction
-" 
+"
 " }}}
 " Error toggles ----------------------------------------------------------- {{{
 

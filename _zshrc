@@ -3547,3 +3547,6 @@ source ~/.zsh/zshrc.local
 # Local variables:
 # mode: sh
 # End:
+
+# added by travis gem
+[ -f /home/epsilonhalbe/.travis/travis.sh ] && source /home/epsilonhalbe/.travis/travis.sh

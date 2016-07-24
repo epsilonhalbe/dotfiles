@@ -9,8 +9,10 @@ zrclocal
 #@# split functions-search 8
 
 ## }}}
-export TERM=xterm-256color 
-alias tmux='tmux -2'
+export TERM=screen-256color 
+#eval `dircolors ~/.zsh/dircolors.monokai`
+eval `dircolors ~/.zsh/dircolors.solarized`
+#alias tmux='tmux -2'
 #[[ $TERM != "screen-256color" ]] && tmux
 #if which tmux 2>&1 >/dev/null; then
     ##if not inside a tmux session, and if no session is started, start a new session
@@ -130,6 +132,7 @@ function cabal_sandbox_info() {
 }
 
 RPROMPT="\$(haskell_info) $RPROMPT"
+source ~/utils/git-subrepo/.rc
 #function chpwd {
 #    case $(type ghc) in
 #        (*alias*) unalias ghc;;
@@ -153,4 +156,3 @@ RPROMPT="\$(haskell_info) $RPROMPT"
 # Local variables:
 # mode: sh
 # End:
-

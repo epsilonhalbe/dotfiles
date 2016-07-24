@@ -8,13 +8,13 @@ HOMEBINDIR="$HOME/bin"
 if [ -d $HOMEBINDIR ] ; then
     for dir in `ls $HOMEBINDIR`; do
         dir=$HOMEBINDIR/$dir
-        if [[ -d $dir ]] ; then
+        if [[ -d $dir && -z $(echo $PATH | grep -o $dir) ]] ; then
             PATH=$dir:$PATH
         fi
     done
 fi
 
-if [ -d "$HOME/bin" ] ; then
+if [[ -d "$HOME/bin" && -z $(echo $PATH | grep -o $PATH/bin) ]] ; then
     PATH=$HOME/bin:$PATH
 fi
 
@@ -22,3 +22,14 @@ OCAMLDIR="/opt/ocaml/bin/"
 if [ -d $OCAMLDIR ] ; then
     PATH=$OCAMLDIR:$PATH
 fi
+
+CUDABIN="/usr/local/cuda-7.5/bin"
+if [ -d $CUDABIN ] ; then
+    PATH=$CUDABIN:$PATH
+fi
+
+CUDALIB="/usr/local/cuda-7.5/lib64"
+if [ -d $CUDALIB ] ; then
+    LD_LIBRARY_PATH=$CUDALIB
+fi
+
