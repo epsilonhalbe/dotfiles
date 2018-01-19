@@ -40,7 +40,9 @@ prompt wunjo
 ## {{{
 ##alias gvim='gvim -p --remote-tab-silent'
 #alias vi='gvim'
-alias vim='gvim'
+if ( where nvim > /dev/null )
+    then alias vim='nvim'
+fi
 alias -s tex=vim
 alias -s bib=vim
 alias -s hs=vim
@@ -55,18 +57,6 @@ alias music='mpc -p 6601'
 alias ghc-sandbox="ghc -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
 alias ghci-sandbox="ghci -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
 alias runhaskell-sandbox="runhaskell -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
-
-alias g="ghci"
-
-alias mute='amixer -q set Master toggle'
-alias voldown='amixer -c 0 -q set Master 5%- unmute'
-alias volup='amixer -c 0 -q set Master 5%+ unmute'
-alias gnext='dbus-send --print-reply --type=method_call --dest=org.mpris.guayadeque /Player org.freedesktop.MediaPlayer.Next'
-alias gprev='dbus-send --print-reply --type=method_call --dest=org.mpris.guayadeque /Player org.freedesktop.MediaPlayer.Prev'
-alias gplay='dbus-send --print-reply --type=method_call --dest=org.mpris.guayadeque /Player org.freedesktop.MediaPlayer.Pause'
-alias bnext='banshee --next'
-alias bprev='banshee --restart-or-previous'
-alias bplay='banshee --toggle-playing'
 ## }}}
 
 # {{{
@@ -80,59 +70,59 @@ function pdfsearch()
     done
 }
 # }}}
-layout=$(setxkbmap  -query | grep "layout"  | cut -d' ' -f6 )
-variant=$(setxkbmap -query | grep "variant" | cut -d' ' -f5 )
-
-if [[ ! (( $layout == "de" ) && ( $variant == "neo" )) ]]; then
-    setxkbmap de neo
-fi
+#layout=$(setxkbmap  -query | grep "layout"  | cut -d' ' -f6 )
+#variant=$(setxkbmap -query | grep "variant" | cut -d' ' -f5 )
+#
+#if [[ ! (( $layout == "de" ) && ( $variant == "neo" )) ]]; then
+#    setxkbmap de neo
+#fi
 
 autoload -U +X bashcompinit && bashcompinit
-eval "$(stack --bash-completion-script stack)"
+#eval "$(stack --bash-completion-script stack)"
 
 autoload -U colors && colors
-function haskell_info() {
-    cabal_files=(*.cabal(N))
-    if [ $#cabal_files -gt 0 ]; then
-        if [ -f cabal.sandbox.config ]; then
-            cabal_sandbox_info
-        elif [ -f stack.yaml ]; then
-            stack_info
-        else
-            echo "%{$fg[red]%}no stack/sandbox%{$reset_color%}"
-        fi
-    fi
-}
-
-function stack_info() {
-    ghc_version=`ghc --version | rev | cut -d' ' -f 1 | rev`
-    resolver_yaml=`cat stack.yaml | grep resolver | cut -d' ' -f 2`
-    if [ -d ".stack-work/install/x86_64-linux/${resolver_yaml}" ]; then
-        ghc_stack=`ls .stack-work/install/x86_64-linux/${resolver_yaml}/ | grep ${ghc_version}`
-        if [ $ghc_stack ]; then
-            echo "[%{$fg[green]%}${resolver_yaml} %{$reset_color%}| %{$fg[green]%}$ghc_version%{$reset_color%}]"
-        else
-            ghc_stack=`ls .stack-work/install/x86_64-linux/${resolver_yaml}/ | xargs`
-            echo  "[%{$fg[green]%}$resolver_yaml%{$reset_color%}|%{$fg[red]%}$ghc_stack%{$reset_color%}]"
-        fi
-    else
-        echo  "%{$fg[red]%}[${resolver_yaml} missing please do a 'stack build']%{$reset_color%}"
-    fi
-}
-
-function cabal_sandbox_info() {
-    ghc_version=`ghc --version | rev | cut -d' ' -f 1 | rev`
-    ghc_loc=`ls .cabal-sandbox | grep ghc | cut -d'-' -f 4 | grep $ghc_version`
-    if [ $ghc_loc ]; then
-        echo "[%{$fg[green]%}$ghc_version%{$reset_color%}]"
-    else
-        ghc_version=`ls .cabal-sandbox | grep ghc | cut -d'-' -f 4 | xargs`
-        echo  "[%{$fg[red]%}$ghc_version%{$reset_color%}]"
-    fi
-}
-
-RPROMPT="\$(haskell_info) $RPROMPT"
-source ~/utils/git-subrepo/.rc
+#function haskell_info() {
+#    cabal_files=(*.cabal(N))
+#    if [ $#cabal_files -gt 0 ]; then
+#        if [ -f cabal.sandbox.config ]; then
+#            cabal_sandbox_info
+#        elif [ -f stack.yaml ]; then
+#            stack_info
+#        else
+#            echo "%{$fg[red]%}no stack/sandbox%{$reset_color%}"
+#        fi
+#    fi
+#}
+#
+#function stack_info() {
+#    ghc_version=`ghc --version | rev | cut -d' ' -f 1 | rev`
+#    resolver_yaml=`cat stack.yaml | grep resolver | cut -d' ' -f 2`
+#    if [ -d ".stack-work/install/x86_64-linux/${resolver_yaml}" ]; then
+#        ghc_stack=`ls .stack-work/install/x86_64-linux/${resolver_yaml}/ | grep ${ghc_version}`
+#        if [ $ghc_stack ]; then
+#            echo "[%{$fg[green]%}${resolver_yaml} %{$reset_color%}| %{$fg[green]%}$ghc_version%{$reset_color%}]"
+#        else
+#            ghc_stack=`ls .stack-work/install/x86_64-linux/${resolver_yaml}/ | xargs`
+#            echo  "[%{$fg[green]%}$resolver_yaml%{$reset_color%}|%{$fg[red]%}$ghc_stack%{$reset_color%}]"
+#        fi
+#    else
+#        echo  "%{$fg[red]%}[${resolver_yaml} missing please do a 'stack build']%{$reset_color%}"
+#    fi
+#}
+#
+#function cabal_sandbox_info() {
+#    ghc_version=`ghc --version | rev | cut -d' ' -f 1 | rev`
+#    ghc_loc=`ls .cabal-sandbox | grep ghc | cut -d'-' -f 4 | grep $ghc_version`
+#    if [ $ghc_loc ]; then
+#        echo "[%{$fg[green]%}$ghc_version%{$reset_color%}]"
+#    else
+#        ghc_version=`ls .cabal-sandbox | grep ghc | cut -d'-' -f 4 | xargs`
+#        echo  "[%{$fg[red]%}$ghc_version%{$reset_color%}]"
+#    fi
+#}
+#
+#RPROMPT="\$(haskell_info) $RPROMPT"
+#source ~/utils/git-subrepo/.rc
 #function chpwd {
 #    case $(type ghc) in
 #        (*alias*) unalias ghc;;
