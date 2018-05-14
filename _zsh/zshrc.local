@@ -51,8 +51,9 @@ alias -s md=vim
 alias -s py=python3
 alias -s jar='java -jar'
 alias o='xdg-open'
-alias .vimrc='vim ~/.vimrc'
+alias .vimrc='vim ~/.config/nvim/init.vim'
 alias .zshrc='vim ~/.zshrc'
+alias zshrc='vim ~/.zsh/zshrc.local'
 alias music='mpc -p 6601'
 alias ghc-sandbox="ghc -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
 alias ghci-sandbox="ghci -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
@@ -72,11 +73,13 @@ function pdfsearch()
 # }}}
 #layout=$(setxkbmap  -query | grep "layout"  | cut -d' ' -f6 )
 #variant=$(setxkbmap -query | grep "variant" | cut -d' ' -f5 )
-#
-#if [[ ! (( $layout == "de" ) && ( $variant == "neo" )) ]]; then
-#    setxkbmap de neo
-#fi
 
+#if [[ ! (( $layout == "de" ) && ( $variant == "neo" )) ]]; then
+    #setxkbmap de neo
+#fi
+alias uiae='setxkbmap de'
+alias asdf='setxkbmap de neo'
+compinit
 autoload -U +X bashcompinit && bashcompinit
 #eval "$(stack --bash-completion-script stack)"
 

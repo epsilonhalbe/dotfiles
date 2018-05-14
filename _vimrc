@@ -139,7 +139,7 @@ set shell=/bin/sh
 set lazyredraw
 set matchtime=3
 "set breakindent
-set showbreak=\ \ \ ↪
+set showbreak= ↪  
 "set splitbelow
 "set splitright
 set fillchars=diff:⣿
