@@ -11,50 +11,48 @@ filetype off
 
     call plug#begin('~/.nvim/plugged')
 
-    Plug 'ervandew/supertab'
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
-    Plug 'SirVer/ultisnips'
-    Plug 'honza/vim-snippets'
+    Plug 'Shougo/neosnippet.vim'
+    Plug 'Shougo/neosnippet-snippets'
+    Plug 'Shougo/echodoc.vim'
 
     Plug 'scrooloose/nerdtree'
     Plug 'ivalkeen/nerdtree-execute'
     Plug 'Xuyuanp/nerdtree-git-plugin'
 
     Plug 'airblade/vim-gitgutter'
+    Plug 'ap/vim-css-color'
+    Plug 'blueyed/vim-diminactive'
+
+    Plug 'direnv/direnv.vim'
+
     Plug 'chrisbra/unicode.vim'     " provides some unicode utilities
     Plug 'junegunn/vim-easy-align'  " aligns stuff
     Plug 'Lokaltog/vim-easymotion'  " makes moving to letters easy-peasy
     Plug 'mileszs/ack.vim'          " provides interfacing with ack patch this for haskell
+
+    Plug 'jremmen/vim-ripgrep'
     Plug 'Raimondi/delimitMate'     " automatically closes parens and stuff
     Plug 'scrooloose/nerdcommenter' " makes commenting stuff in/out no hustle
     Plug 'tpope/vim-fugitive'
     Plug 'jreybert/vimagit'
+
+    Plug 'kshenoy/vim-signature'
     Plug 'triglav/vim-visual-increment'
     Plug 'sjl/gundo.vim'            " git like undoing
     Plug 'vim-scripts/renamer.vim'  " super easy renaming of files/directories
     Plug 'vim-airline/vim-airline'
-    Plug 'vim-scripts/colorsel.vim' " interactive color selection in Gvim
+    Plug 'vim-airline/vim-airline-themes'
     Plug 'christoomey/vim-tmux-navigator'
 
-    Plug 'junegunn/fzf', { 'dir': '~/utils/fzf' , 'do': './install --all' }
+    Plug 'junegunn/fzf', { 'dir': '~/utils/fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf.vim'
 
-    "call dein#add('Shougo/vimproc.vim', {
-    "    \ 'build' : {
-    "    \     'windows' : 'tools\\update-dll-mingw',
-    "    \     'cygwin' : 'make -f make_cygwin.mak',
-    "    \     'mac' : 'make -f make_mac.mak',
-    "    \     'linux' : 'make',
-    "    \     'unix' : 'gmake',
-    "    \    },
-    "    \ })
-
-    Plug 'autozimu/LanguageClient-neovim', {
-        \ 'branch': 'next',
-        \ 'do': 'bash install.sh',
-        \ }
+    Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
     Plug 'mhinz/vim-sayonara'
     Plug 'neomake/neomake'
+    Plug 'qpkorr/vim-bufkill'
+    Plug 'jlanzarotta/bufexplorer'
     Plug 'ryanoasis/vim-devicons'
     Plug 'tmux-plugins/vim-tmux'
     Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -64,6 +62,9 @@ filetype off
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-unimpaired'
     Plug 'vim-scripts/SyntaxRange'
+    Plug 'xolox/vim-misc'
+    Plug 'xolox/vim-notes'
+    Plug 'Yggdroot/indentLine'
 
 
     " LANGUAGES {{{
@@ -77,8 +78,9 @@ filetype off
             "Plug 'aucsd-progsys/liquid-types.vim', { 'for':'haskell'}
             "Plug 'eagletmt/ghcmod-vim',            { 'for':'haskell'}
             "Plug 'lukerandall/haskellmode-vim',    { 'for':'haskell'}
+            Plug 'Twinside/vim-haskellFold',      { 'for':'haskell'}
             Plug 'glittershark/vim-hare',         { 'for':'haskell'}
-            Plug 'bitc/vim-hdevtools',            { 'for':'haskell'}
+            " Plug 'bitc/vim-hdevtools',            { 'for':'haskell'}
             Plug 'eagletmt/neco-ghc',             { 'for':'haskell'}
             Plug 'hspec/hspec.vim',               { 'for':'haskell'}
             Plug 'mpickering/hlint-refactor-vim', { 'for':'haskell'}
@@ -97,8 +99,15 @@ filetype off
         " LANG: NIX {{{
             Plug 'LnL7/vim-nix', {'for' : 'nix'}
         " }}}
+        " LANG: PLANTUML {{{
+            Plug 'aklt/plantuml-syntax'
+        " }}}
         " LANG: POSTGRES {{{
             Plug 'lifepillar/pgsql.vim', {'for' : 'pgsql'}
+        " }}}
+        " LANG: PURESCRIPT {{{
+            Plug 'raichoo/purescript-vim', {'for' : 'purs'}
+            " Plug 'FrigoEU/psc-ide-vim', {'for' : 'purs'}
         " }}}
         " LANG: RUST {{{
             Plug 'rust-lang/rust.vim'
@@ -124,8 +133,10 @@ call plug#end()
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#fnamemod = ':t'
     let g:airline#extensions#tabline#show_tab_nr = 1
+    let g:airline#extensions#branch#format = 2
     let g:airline_powerline_fonts = 1
-    set guifont=Sauce\ Code\ Pro\ Nerd\ Font\ Complete:h13
+    let g:airline_theme = 'seagull'
+    let g:airline#extensions#branch#enabled = 0
     " }}}
 
     " Ctrl-P {{{
@@ -150,6 +161,13 @@ call plug#end()
 
     " Deoplete {{{
     let g:deoplete#enable_at_startup = 1
+    call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
+    " }}}
+
+    " diminactive {{{
+      let g:diminactive_buftype_blacklist = ['nofile', 'nowrite', 'acwrite', 'quickfix', 'help']
+      let g:diminactive_enable_focus = 1
+      let g:diminactive_use_syntax = 0
     " }}}
 
     " devicons {{{
@@ -157,7 +175,8 @@ call plug#end()
     " }}}
 
     " Easy-Align {{{
-    vnoremap <silent> <Enter> :EasyAlign<cr>
+    xmap <Enter> <Plug>(EasyAlign)
+    let g:easy_align_ignore_groups = ['String']
     " }}}
 
     " Easymotion {{{
@@ -168,8 +187,19 @@ call plug#end()
     omap φ ;;f
     " }}}
 
+    " Easytags {{{
+    let g:easytags_async = 1
+    let g:easytags_languages            = {}
+    let g:easytags_languages.haskell    = {'cmd': 'hasktags', 'args': ["-R -S '[\".hs\"]'"]}
+    let g:easytags_languages.purescript = {'cmd': 'hasktags', 'args': ["-R -S '[\".purs\"]'"]}
+    " }}}
+
     " FZF {{{
         nnoremap <C-P> :FZF<CR>
+        nnoremap <C-B> :Buffers<CR>
+        "nnoremap <C-]> :Tags <c-r>=expand("<cword>")<cr><cr>
+        nnoremap <C-]> g<C-]>
+        let $FZF_DEFAULT_OPTS .= ' --inline-info'
     " }}}
 
     " Gundo {{{
@@ -178,15 +208,31 @@ call plug#end()
     let g:gundo_preview_bottom = 1
     " }}}
 
-    " Language Client {{{
-    let g:LanguageClient_serverCommands = {
-        \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-        \ 'haskell': ['hie', '--lsp'],
-        \ }
+    " Indent Lines {{{
+      let g:indentLine_char = '▏'
+      " let g:indentLine_color_tty_light = 7 " (default: 4)
+      " let g:indentLine_color_dark = 1 " (default: 2)
+      " let g:indentLine_bgcolor_term = 202
+      " let g:indentLine_bgcolor_gui = '#1E0010'
+      " let g:indentLine_color_gui = '#FF0000'
+    " }}}
 
-    nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-    nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-    nnoremap <silent> <LocalLeader>r :call LanguageClient#textDocument_rename()<CR>
+    " Language Client {{{
+    let g:LanguageClient_serverCommands = {}
+    let g:LanguageClient_serverCommands.rust = ['rustup', 'run', 'nightly', 'rls']
+    let g:LanguageClient_serverCommands.haskell = ['hie', '--lsp']
+
+
+     nnoremap <F1> :call LanguageClient_contextMenu()<CR>
+     map <Leader>lk :call LanguageClient#textDocument_hover()<CR>
+     map <Leader>lg :call LanguageClient#textDocument_definition()<CR>
+     map <Leader>lr :call LanguageClient#textDocument_rename()<CR>
+     map <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
+     map <Leader>lrf :call LanguageClient#textDocument_formatting()<CR>
+     map <Leader>lb :call LanguageClient#textDocument_references()<CR>
+     map <Leader>la :call LanguageClient#textDocument_codeAction()<CR>
+     map <Leader>ls :call LanguageClient#textDocument_documentSymbol()<CR>
+     " let g:LanguageClient_rootMarkers = ['stack.yaml']
     " }}}
 
     " Neomake {{{
@@ -194,16 +240,46 @@ call plug#end()
         autocmd! VimLeave * let g:neomake_verbose = 0
         let g:neomake_haskell_ghc_mod_args = '-g-Wall'
         let g:neomake_open_list = 2
+        autocmd! BufWritePost *.purs Neomake
+    " }}}
+
+    " Neosnippets {{{
+        let g:neosnippet#snippets_directory='~/.nvim/NeoSnippets'
+        " Map expression when a tab is hit:
+        "           checks if the completion popup is visible
+        "           if yes
+        "               then it cycles to next item
+        "           else
+        "               if expandable_or_jumpable
+        "                   then expands_or_jumps
+        "                   else returns a normal TAB
+        imap <expr><TAB>   pumvisible() ? "\<C-n>" : (neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>")
+        imap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+        imap <expr><silent><CR> pumvisible() ? deoplete#mappings#close_popup() . "\<Plug>(neosnippet_jump_or_expand)" : "\<CR>"
+        smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+        " Expands or completes the selected snippet/item in the popup menu
+        smap <silent><CR> <Plug>(neosnippet_jump_or_expand)
+    " }}}
+
+    " NERDCommenter {{{
+        let NERDSpaceDelims=1
+        let NERDTrimTRailingWhitespace=1
+        let NERDComDefaultDelims=1
+        let NERDCompactSexyComs=1
+        nnoremap <Leader>cc <Plug>NerdCommenterSexy
+        nnoremap <Leader>cs <Plug>NerdCommenterComment
     " }}}
 
     " NERDTree {{{
     noremap  <F2> :NERDTreeToggle<cr>
     inoremap <F2> <esc>:NERDTreeToggle<cr>
+    noremap  <F3> :NERDTreeFind<cr>
+    inoremap <F3> <esc>:NERDTreeFind<cr>
 
     autocmd StdinReadPre * let s:std_in=1
     autocmd Filetype nerdtree setlocal nolist
 
-    let g:NERDTreeWinSize=25
+    let g:NERDTreeWinSize=50
     let g:NERDTreeAutoDeleteBuffer=1
     let NERDTreeHighlightCursorline=1
     let NERDTreeIgnore =['\~$','\.pyc$', 'pip-log\.txt$', 'whoosh_index$']
@@ -244,12 +320,16 @@ call plug#end()
     call NERDTreeHighlightFile('bashprofile','Gray','none','#686868','#141e23')
     " }}}
 
+    " Notes {{{
+        let g:notes_directories = ['~/Documents/Notes']
+    " }}}
+
     " Sayonara {{{
     cnoreabbrev <expr> x getcmdtype() == ":" && getcmdline() == 'x' ? 'Sayonara' : 'x'
     " }}}
 
     " SuperTab {{{
-    let g:SuperTabDefaultCompletionType = '<C-n>'
+    "let g:SuperTabDefaultCompletionType = '<C-n>'
     " }}}
 
     " SyntaxRange {{{
@@ -261,6 +341,7 @@ call plug#end()
         autocmd Syntax markdown call SyntaxRange#Include('\(\`\`\`\|\~\~\~\).*zsh.*'       , '\(\`\`\`\|\~\~\~\)', 'zsh'       , 'NonText')
         autocmd Syntax markdown call SyntaxRange#Include('\(\`\`\`\|\~\~\~\).*javascript.*', '\(\`\`\`\|\~\~\~\)', 'javascript', 'NonText')
         autocmd Syntax markdown call SyntaxRange#Include('\(\`\`\`\|\~\~\~\).*purescript.*', '\(\`\`\`\|\~\~\~\)', 'purescript', 'NonText')
+        autocmd Syntax haskell  call SyntaxRange#Include('\[PG.isql|', '|]', 'postgresql', 'NonText')
     " }}}
 
     " tmux {{{
@@ -273,8 +354,8 @@ call plug#end()
     nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
     nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
     nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-    nnoremap gt :bn<cr>
-    nnoremap gT :bp<cr>
+    nnoremap gb :bn<cr>
+    nnoremap gB :bp<cr>
     " }}}
 
     " UltiSnips {{{
@@ -287,28 +368,12 @@ call plug#end()
         let g:UltiSnipsSnippetDirectories=[$HOME.'/.nvim/UltiSnips']
         let g:UltiSnipsSnippetsDir=$HOME.'/.nvim/UltiSnips'
     " }}}
-
-    " YouCompleteme {{{
-    let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-    let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-    let g:SuperTabDefaultCompletionType = '<C-n>'
-    let g:ycm_autoclose_preview_window_after_completion = 0
-    let g:ycm_confirm_extra_conf = 1
-    let g:ycm_semantic_triggers =  {
-      \   'elixir':     ['.'],
-      \   'go':         ['.'],
-      \   'haskell':    ['.'],
-      \   'java':       ['.'],
-      \   'purescript': ['.'],
-      \   'python':     ['.'],
-      \   'rust':       ['.'],
-      \   'typescript': ['.'],
-      \ }
-    " }}}
-
 " }}}
 
 " LANGUAGE PLUGIN SETTINGS {{{
+    " LANG: JSON {{{
+        com! FormatJSON :%!python -c "import json, sys, collections; print json.dumps(json.load(sys.stdin, object_pairs_hook=collections.OrderedDict), indent=4)"
+    " }}}
     " LANG: RUST {{{
     augroup rust
         autocmd FileType rust let g:autofmt_autosave = 1
@@ -318,9 +383,8 @@ call plug#end()
     augroup haskell
       autocmd BufRead,BufNewFile *.hs,*.lhs setlocal filetype=haskell
       autocmd BufRead,BufNewFile *.lhs      setlocal syntax=markdown
-      autocmd BufRead,BufNewFile *.hs,*.lhs setlocal tabstop=2     " <tab> inserts 2 spaces
-      autocmd BufRead,BufNewFile *.hs,*.lhs setlocal softtabstop=2 " <BS> over an autoindent deletes 2 spaces.
-      autocmd BufRead,BufNewFile *.hs,*.lhs setlocal shiftwidth=2  " an indent level is 2 spaces wide.
+      setlocal completefunc=LanguageClient#complete
+      setlocal formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
     " hlint refactor {{{
         let g:hlintRefactor#disableDefaultKeybindings = 1
         map <silent> <localleader>r :call ApplyOneSuggestion()<CR>
@@ -346,8 +410,8 @@ call plug#end()
     "   autocmd FileType haskell nmap <silent> <localleader>T :GhcModTypeInsert<CR>
     " }}}
     " Neco-GHC {{{
-      " autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-      " let g:necoghc_enable_detailed_browse = 1
+       autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+       let g:necoghc_enable_detailed_browse = 1
     " }}}
     " Haskellmode {{{
     "   " Open the definition in a new vsplit
@@ -383,6 +447,24 @@ call plug#end()
     " Hoogle {{{
         autocmd FileType haskell nmap <localleader>? yiw:Hoogle <C-R>"<cr>
     " }}}
+    augroup end
+    " }}}
+    " LANG: PURESCRIPT {{{
+    augroup purescript
+        let g:psc_ide_syntastic_mode=0
+        nm <buffer> <silent> <leader>L :Plist<CR>
+        nm <buffer> <silent> <leader>l :Pload!<CR>
+        nm <buffer> <silent> <leader>r :Prebuild!<CR>
+        nm <buffer> <silent> <leader>f :PaddClause<CR>
+        nm <buffer> <silent> <leader>t :PaddType<CR>
+        nm <buffer> <silent> <leader>a :Papply<CR>
+        nm <buffer> <silent> <leader>A :Papply!<CR>
+        nm <buffer> <silent> <leader>C :Pcase!<CR>
+        nm <buffer> <silent> <leader>i :Pimport<CR>
+        nm <buffer> <silent> <leader>qa :PaddImportQualifications<CR>
+        nm <buffer> <silent> <leader>g :Pgoto<CR>
+        nm <buffer> <silent> <leader>p :Pursuit<CR>
+        nm <buffer> <silent> <leader>T :Ptype<CR>
     augroup end
     " }}}
     " LANG: MARKDOWN {{{
@@ -462,7 +544,7 @@ call plug#end()
     set relativenumber
     set ruler
     set scrolloff=5                                      " vertical scrolloff
-    set scrolloff=999                                    " vertical scrolloff if set to 999 cursor is always in the middle of the screen
+    " set scrolloff=999                                    " vertical scrolloff if set to 999 cursor is always in the middle of the screen
     set shell=/bin/zsh
     set shiftround
     set showbreak=\ \ \ ↪
@@ -784,13 +866,14 @@ call plug#end()
     let mapleader = ";"
     let maplocalleader ="\\"
     inoremap :w  <esc>:w<cr>
+    tnoremap <Esc> <C-\><C-n>
     " }}}
     " Tabs, spaces, wrapping {{{
     set autoindent    " always set autoindenting on
     set smartindent   " use smart indent if there is no indent file
     set tabstop=4     " <tab> inserts 4 spaces
-    set softtabstop=4 " <BS> over an autoindent deletes 4 spaces.
-    set shiftwidth=4  " an indent level is 4 spaces wide.
+    set softtabstop=2 " <BS> over an autoindent deletes 4 spaces.
+    set shiftwidth=2  " an indent level is 2 spaces wide.
     set smarttab      " Handle tabs more intelligently
     set expandtab     " Use spaces, not tabs, for autoindent/tab key.
     set shiftround    " rounds indent to a multiple of shiftwidth
@@ -813,6 +896,8 @@ call plug#end()
     " default to block selection rather than normal visual mode
     nnoremap v <C-v>
     nnoremap <C-v> v
+    vnoremap * y/\V<C-r>=escape(@",'/\')<CR><CR>
+    nnoremap gp `[v`]
 
     noremap <leader><space> :noh<cr>
     noremap <leader><S-space> :call clearmatches()<cr>
@@ -848,6 +933,7 @@ call plug#end()
     endfunction " }}}
 
     set foldtext=MyFoldText()
+    nnoremap <Space> za
     " It's 2012. quasi linewise movement in wraps
     noremap j gj
     noremap k gk
