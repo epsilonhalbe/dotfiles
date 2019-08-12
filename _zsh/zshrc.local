@@ -81,8 +81,9 @@ alias uiae='setxkbmap de'
 alias asdf='setxkbmap de neo'
 compinit
 autoload -U +X bashcompinit && bashcompinit
-#eval "$(stack --bash-completion-script stack)"
-
+eval "$(stack --bash-completion-script stack)"
+# eval "$(direnv hook zsh)"
+RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 autoload -U colors && colors
 #function haskell_info() {
 #    cabal_files=(*.cabal(N))

@@ -12,12 +12,14 @@ filetype off
     call plug#begin('~/.nvim/plugged')
 
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'Shougo/neosnippet.vim'
-    Plug 'Shougo/neosnippet-snippets'
+    " Plug 'Shougo/neosnippet.vim'
+    " Plug 'Shougo/neosnippet-snippets'
+    Plug 'honza/vim-snippets'
+    Plug 'SirVer/ultisnips'
     Plug 'Shougo/echodoc.vim'
 
     Plug 'scrooloose/nerdtree'
-    Plug 'ivalkeen/nerdtree-execute'
+    " Plug 'ivalkeen/nerdtree-execute'
     Plug 'Xuyuanp/nerdtree-git-plugin'
 
     Plug 'airblade/vim-gitgutter'
@@ -48,7 +50,7 @@ filetype off
     Plug 'junegunn/fzf', { 'dir': '~/utils/fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
 
-    Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'mhinz/vim-sayonara'
     Plug 'neomake/neomake'
     Plug 'qpkorr/vim-bufkill'
@@ -73,6 +75,9 @@ filetype off
         " }}}
         " LANG: GRAPHVIZ {{{
         Plug 'wannesm/wmgraphviz.vim', { 'for' : 'dot'}
+        " }}}
+        " LANG: GRAPHVIZ {{{
+        Plug 'jparise/vim-graphql'
         " }}}
         " LANG: HASKELL {{{
             "Plug 'aucsd-progsys/liquid-types.vim', { 'for':'haskell'}
@@ -158,10 +163,115 @@ call plug#end()
     "nnoremap <leader>. :CtrlPTag<cr>
 
     " }}}
+    " COC {{{
+    inoremap <silent><expr> <TAB>
+          \ pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ coc#refresh()
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+
+
+
+    " Use <c-space> to trigger completion.
+    inoremap <silent><expr> <c-space> coc#refresh()
+
+    " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+    " Coc only does snippet and additional edit on confirm.
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+    " Use `[c` and `]c` to navigate diagnostics
+    nmap <silent> [c <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+    " Remap keys for gotos
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
+
+    " Use K to show documentation in preview window
+    nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+    function! s:show_documentation()
+      if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+      else
+        call CocAction('doHover')
+      endif
+    endfunction
+
+    " Highlight symbol under cursor on CursorHold
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    " Remap for rename current word
+    nmap <leader>rn <Plug>(coc-rename)
+
+    " Remap for format selected region
+    xmap <leader>f  <Plug>(coc-format-selected)
+    nmap <leader>f  <Plug>(coc-format-selected)
+
+    augroup mygroup
+      autocmd!
+      " Setup formatexpr specified filetype(s).
+      autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+      " Update signature help on jump placeholder
+      autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    augroup end
+
+    " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+    xmap <leader>a  <Plug>(coc-codeaction-selected)
+    nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+    " Remap for do codeAction of current line
+    nmap <leader>ac  <Plug>(coc-codeaction)
+    " Fix autofix problem of current line
+    nmap <leader>qf  <Plug>(coc-fix-current)
+
+    " Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+    nmap <silent> <TAB> <Plug>(coc-range-select)
+    xmap <silent> <TAB> <Plug>(coc-range-select)
+    xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
+
+    " Use `:Format` to format current buffer
+    command! -nargs=0 Format :call CocAction('format')
+
+    " Use `:Fold` to fold current buffer
+    command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+    " use `:OR` for organize import of current buffer
+    command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+    " Add status line support, for integration with other plugin, checkout `:h coc-status`
+    set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+    " Using CocList
+    " Show all diagnostics
+    nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+    " Manage extensions
+    nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+    " Show commands
+    nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+    " Find symbol of current document
+    nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+    " Search workspace symbols
+    nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+    " Do default action for next item.
+    nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+    " Do default action for previous item.
+    nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+    " Resume latest coc list
+    nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+
+
+    " }}}
     " Deoplete {{{
     let g:deoplete#enable_at_startup = 1
-    call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
     " }}}
 
     " diminactive {{{
@@ -180,6 +290,7 @@ call plug#end()
     " }}}
 
     " Easymotion {{{
+    let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     nmap f ;;f
     nmap F ;;F
     vmap f ;;f
@@ -200,6 +311,14 @@ call plug#end()
         "nnoremap <C-]> :Tags <c-r>=expand("<cword>")<cr><cr>
         nnoremap <C-]> g<C-]>
         let $FZF_DEFAULT_OPTS .= ' --inline-info'
+
+        command! -bang -nargs=* Rg
+              \ call fzf#vim#grep(
+              \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+              \   <bang>0 ? fzf#vim#with_preview('up:60%')
+              \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+              \   <bang>0)
+
     " }}}
 
     " Gundo {{{
@@ -218,47 +337,57 @@ call plug#end()
     " }}}
 
     " Language Client {{{
-    let g:LanguageClient_serverCommands = {}
-    let g:LanguageClient_serverCommands.rust = ['rustup', 'run', 'nightly', 'rls']
-    let g:LanguageClient_serverCommands.haskell = ['hie', '--lsp']
+    " let g:LanguageClient_serverCommands = {}
+    " let g:LanguageClient_serverCommands.rust = ['rustup', 'run', 'nightly', 'rls']
+    " let g:LanguageClient_serverCommands.haskell = ['hie', '--lsp']
+    " let g:LanguageClient_diagnosticsList = "Disabled"
+    " let g:LanguageClient_selectionUI = "fzf"
 
 
-     nnoremap <F1> :call LanguageClient_contextMenu()<CR>
-     map <Leader>lk :call LanguageClient#textDocument_hover()<CR>
-     map <Leader>lg :call LanguageClient#textDocument_definition()<CR>
-     map <Leader>lr :call LanguageClient#textDocument_rename()<CR>
-     map <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
-     map <Leader>lrf :call LanguageClient#textDocument_formatting()<CR>
-     map <Leader>lb :call LanguageClient#textDocument_references()<CR>
-     map <Leader>la :call LanguageClient#textDocument_codeAction()<CR>
-     map <Leader>ls :call LanguageClient#textDocument_documentSymbol()<CR>
+     " nnoremap <F1> :call LanguageClient_contextMenu()<CR>
+     " map <Leader>lk :call LanguageClient#textDocument_hover()<CR>
+     " map <Leader>lg :call LanguageClient#textDocument_definition()<CR>
+     " map <Leader>lr :call LanguageClient#textDocument_rename()<CR>
+     " map <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
+     " map <Leader>lrf :call LanguageClient#textDocument_formatting()<CR>
+     " map <Leader>lb :call LanguageClient#textDocument_references()<CR>
+     " map <Leader>la :call LanguageClient#textDocument_codeAction()<CR>
+     " map <Leader>ls :call LanguageClient#textDocument_documentSymbol()<CR>
      " let g:LanguageClient_rootMarkers = ['stack.yaml']
     " }}}
 
     " Neomake {{{
-        autocmd! BufWritePost *.hs Neomake
-        autocmd! VimLeave * let g:neomake_verbose = 0
-        let g:neomake_haskell_ghc_mod_args = '-g-Wall'
-        let g:neomake_open_list = 2
-        autocmd! BufWritePost *.purs Neomake
+        call neomake#configure#automake('w')
+        " autocmd! BufWritePost *.hs Neomake
+        " autocmd! VimLeave * let g:neomake_verbose = 0
+        " let g:neomake_haskell_ghc_mod_args = '-g-Wall'
+        " let g:neomake_open_list = 2
+        " autocmd! BufWritePost *.purs Neomake
     " }}}
 
     " Neosnippets {{{
-        let g:neosnippet#snippets_directory='~/.nvim/NeoSnippets'
-        " Map expression when a tab is hit:
-        "           checks if the completion popup is visible
-        "           if yes
-        "               then it cycles to next item
-        "           else
-        "               if expandable_or_jumpable
-        "                   then expands_or_jumps
-        "                   else returns a normal TAB
-        imap <expr><TAB>   pumvisible() ? "\<C-n>" : (neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>")
-        imap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-        imap <expr><silent><CR> pumvisible() ? deoplete#mappings#close_popup() . "\<Plug>(neosnippet_jump_or_expand)" : "\<CR>"
-        smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-        " Expands or completes the selected snippet/item in the popup menu
-        smap <silent><CR> <Plug>(neosnippet_jump_or_expand)
+        " let g:neosnippet#enable_snipmate_compatibility = 1
+        " let g:neosnippet#snippets_directory='~/.nvim/plugged/vim-snippets/snippets/'
+        " let g:neosnippet#enable_at_startup=1
+        " " Plugin key-mappings.
+        " " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+        " imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        " smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        " xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+        " " SuperTab like snippets behavior.
+        " " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+        " "imap <expr><TAB>
+        " " \ pumvisible() ? "\<C-n>" :
+        " " \ neosnippet#expandable_or_jumpable() ?
+        " " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+        " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+        " \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+        " " For conceal markers.
+        " if has('conceal')
+          " set conceallevel=2 concealcursor=niv
+        " endif
     " }}}
 
     " NERDCommenter {{{
@@ -279,45 +408,37 @@ call plug#end()
     autocmd StdinReadPre * let s:std_in=1
     autocmd Filetype nerdtree setlocal nolist
 
-    let g:NERDTreeWinSize=50
-    let g:NERDTreeAutoDeleteBuffer=1
+    let NERDTreeWinSize=50
+    let NERDTreeAutoDeleteBuffer=1
+    let NERDTreeQuitOnOpen=1
     let NERDTreeHighlightCursorline=1
-    let NERDTreeIgnore =['\~$','\.pyc$', 'pip-log\.txt$', 'whoosh_index$']
-    let NERDTreeIgnore+=['xapian_index$','\.*\.pid$', 'monitor.py$', '.*-fixtures-.*\.json$']
-    let NERDTreeIgnore+=['\.o$', 'db.db$','\.hi$']
-    let NERDTreeIgnore+=['\.aux$' , '\.bbl$' , '\.blg$'  , '\.dvi$'   , '\.nls$' ]
-    let NERDTreeIgnore+=['\.glg$' , '\.glo$' , '\.gls$'  , '\.idx$'   , '\.fls$' ]
-    let NERDTreeIgnore+=['\.ilg$' , '\.ind$' , '\.ist$'  , '\.log$'   , '\.nlo$' ]
-    let NERDTreeIgnore+=['\.out$' , '\.toc$' , '\.dpth$' , '\._aux$'  , '\._log$']
-    let NERDTreeIgnore+=['\.tdo$' , '\.synctex\.gz$' ,'\.fdb_latexmk$' ,'\.auxlock$']
-    let NERDTreeIgnore+=['\.class$']
     let NERDTreeMinimalUI = 1
     let NERDTreeDirArrows = 1
 
-    function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
-    exec 'autocmd FileType nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
-    exec 'autocmd FileType nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
-    endfunction
+    " function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+    " exec 'autocmd FileType nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+    " exec 'autocmd FileType nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+    " endfunction
 
-    call NERDTreeHighlightFile('jade','green','none','green','#141e23')
-    call NERDTreeHighlightFile('ini','yellow','none','yellow','#141e23')
-    call NERDTreeHighlightFile('md','blue','none','#3366FF','#141e23')
-    call NERDTreeHighlightFile('yml','yellow','none','yellow','#141e23')
-    call NERDTreeHighlightFile('config','yellow','none','yellow','#141e23')
-    call NERDTreeHighlightFile('conf','yellow','none','yellow','#141e23')
-    call NERDTreeHighlightFile('json','yellow','none','yellow','#141e23')
-    call NERDTreeHighlightFile('html','yellow','none','yellow','#141e23')
-    call NERDTreeHighlightFile('styl','cyan','none','cyan','#141e23')
-    call NERDTreeHighlightFile('css','cyan','none','cyan','#141e23')
-    call NERDTreeHighlightFile('coffee','Red','none','red','#141e23')
-    call NERDTreeHighlightFile('js','Red','none','#ffa500','#141e23')
-    call NERDTreeHighlightFile('ts','Blue','none','#6699cc','#141e23')
-    call NERDTreeHighlightFile('php','Magenta','none','#ff00ff','#141e23')
-    call NERDTreeHighlightFile('ds_store','Gray','none','#686868','#141e23')
-    call NERDTreeHighlightFile('gitconfig','Gray','none','#686868','#141e23')
-    call NERDTreeHighlightFile('gitignore','Gray','none','#686868','#141e23')
-    call NERDTreeHighlightFile('bashrc','Gray','none','#686868','#141e23')
-    call NERDTreeHighlightFile('bashprofile','Gray','none','#686868','#141e23')
+    " call NERDTreeHighlightFile('jade','green','none','green','#141e23')
+    " call NERDTreeHighlightFile('ini','yellow','none','yellow','#141e23')
+    " call NERDTreeHighlightFile('md','blue','none','#3366FF','#141e23')
+    " call NERDTreeHighlightFile('yml','yellow','none','yellow','#141e23')
+    " call NERDTreeHighlightFile('config','yellow','none','yellow','#141e23')
+    " call NERDTreeHighlightFile('conf','yellow','none','yellow','#141e23')
+    " call NERDTreeHighlightFile('json','yellow','none','yellow','#141e23')
+    " call NERDTreeHighlightFile('html','yellow','none','yellow','#141e23')
+    " call NERDTreeHighlightFile('styl','cyan','none','cyan','#141e23')
+    " call NERDTreeHighlightFile('css','cyan','none','cyan','#141e23')
+    " call NERDTreeHighlightFile('coffee','Red','none','red','#141e23')
+    " call NERDTreeHighlightFile('js','Red','none','#ffa500','#141e23')
+    " call NERDTreeHighlightFile('ts','Blue','none','#6699cc','#141e23')
+    " call NERDTreeHighlightFile('php','Magenta','none','#ff00ff','#141e23')
+    " call NERDTreeHighlightFile('ds_store','Gray','none','#686868','#141e23')
+    " call NERDTreeHighlightFile('gitconfig','Gray','none','#686868','#141e23')
+    " call NERDTreeHighlightFile('gitignore','Gray','none','#686868','#141e23')
+    " call NERDTreeHighlightFile('bashrc','Gray','none','#686868','#141e23')
+    " call NERDTreeHighlightFile('bashprofile','Gray','none','#686868','#141e23')
     " }}}
 
     " Notes {{{
@@ -341,6 +462,7 @@ call plug#end()
         autocmd Syntax markdown call SyntaxRange#Include('\(\`\`\`\|\~\~\~\).*zsh.*'       , '\(\`\`\`\|\~\~\~\)', 'zsh'       , 'NonText')
         autocmd Syntax markdown call SyntaxRange#Include('\(\`\`\`\|\~\~\~\).*javascript.*', '\(\`\`\`\|\~\~\~\)', 'javascript', 'NonText')
         autocmd Syntax markdown call SyntaxRange#Include('\(\`\`\`\|\~\~\~\).*purescript.*', '\(\`\`\`\|\~\~\~\)', 'purescript', 'NonText')
+        autocmd Syntax python   call SyntaxRange#Include('""".*#graphql.*', '"""', 'graphql', 'NonText')
         autocmd Syntax haskell  call SyntaxRange#Include('\[PG.isql|', '|]', 'postgresql', 'NonText')
     " }}}
 
@@ -363,9 +485,9 @@ call plug#end()
         let g:UltiSnipsExpandTrigger = "<tab>"
         let g:UltiSnipsJumpForwardTrigger = "<tab>"
         let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-        let g:UltiSnipsListSnippets="<F11>"
+        " let g:UltiSnipsListSnippets="<F11>"
         let g:UltiSnipsEditSplit="vertical"
-        let g:UltiSnipsSnippetDirectories=[$HOME.'/.nvim/UltiSnips']
+        let g:UltiSnipsSnippetDirectories=[$HOME.'/.nvim/UltiSnips', $HOME.'/.nvim/plugged/vim-snippets/UltiSnips']
         let g:UltiSnipsSnippetsDir=$HOME.'/.nvim/UltiSnips'
     " }}}
 " }}}
@@ -383,8 +505,8 @@ call plug#end()
     augroup haskell
       autocmd BufRead,BufNewFile *.hs,*.lhs setlocal filetype=haskell
       autocmd BufRead,BufNewFile *.lhs      setlocal syntax=markdown
-      setlocal completefunc=LanguageClient#complete
-      setlocal formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+      " set completefunc=LanguageClient#complete
+      " set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
     " hlint refactor {{{
         let g:hlintRefactor#disableDefaultKeybindings = 1
         map <silent> <localleader>r :call ApplyOneSuggestion()<CR>
@@ -506,7 +628,7 @@ call plug#end()
     "set listchars+=eol:¬
     "set notimeout
     "set nottimeout
-    "set shortmess=atI                                   " shorten command-line text and other info tokens (see :help shortmess)
+    set shortmess+=c                                   " shorten command-line text and other info tokens (see :help shortmess)
     "set splitbelow
     "set splitright
     "set ttimeout
@@ -515,7 +637,21 @@ call plug#end()
     set backspace=indent,eol,start
     set cf                                               " enable error files and error jumping
     set clipboard+=unnamed,unnamedplus
-    set cmdheight=1
+    " let g:clipboard = {
+          " \   'name': 'xclip',
+          " \   'copy': {
+          " \      '+': 'xclip -i',
+          " \      '*': 'xclip -i',
+          " \    },
+          " \   'paste': {
+          " \      '+': 'xclip -o',
+          " \      '*': 'xclip -o',
+          " \   },
+          " \   'cache_enabled': 1,
+          " \ }
+
+    set cmdheight=2
+    set updatetime=300
     set completeopt=longest,menuone,preview
     set confirm
     set cpoptions+=J
@@ -551,6 +687,7 @@ call plug#end()
     set showcmd
     set showmatch
     set showmode " to see which indentation modes are set type in command mode verbose set ai? cin? cink? cino? si? inde? indk?
+    set signcolumn=yes
     set sidescroll=1
     set sidescrolloff=5                                  " horzontal scrolloff
     set smartcase
@@ -602,12 +739,6 @@ call plug#end()
      call mkdir(targetdir, "p", 0700)
     endif
 
-    set backupdir=~/.nvim/tmp/backup// " backups
-    " create undodir directory if possible and does not exist yet
-    let targetdir=$HOME . "/.nvim/tmp/backup"
-    if isdirectory(targetdir) != 1 && getftype(targetdir) == "" && exists("*mkdir")
-     call mkdir(targetdir, "p", 0700)
-    endif
     set directory=~/.nvim/tmp/swap//   " swap files
     " create undodir directory if possible and does not exist yet
     let targetdir=$HOME . "/.nvim/tmp/swap"
@@ -615,8 +746,8 @@ call plug#end()
      call mkdir(targetdir, "p", 0700)
     endif
 
-    set backupskip=/tmp/*,/private/tmp/*"
-    set backup                   " enable backups
+    set nobackup
+    set nowritebackup
     set swapfile                 " It's 2012, Vim.
     set makeef=error.err         " When using make, where should it dump the file
     " }}}

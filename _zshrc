@@ -3552,3 +3552,13 @@ source ~/.zsh/zshrc.local
 [ -f /home/epsilonhalbe/.travis/travis.sh ] && source /home/epsilonhalbe/.travis/travis.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='fd --type f'
+
+. ${HOME}/utils/z/z.sh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Hook to direnv
+eval "$(direnv hook zsh)"
