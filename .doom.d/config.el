@@ -46,12 +46,12 @@
  org-roam-capture-templates
  '(("d" "default" plain
     "%?"
-    :if-new (file+head "%<%Y-%m-%dT%H:%M:%S>-${slug}" "#+title: ${title}\n")
+    :if-new (file+head "%<%Y-%m-%d_%H%M>-${slug}.org" "#+title: ${title}\n#+filetags: ${filetags}")
     :unnarrowed t))
  org-roam-dailies-capture-templates
  '(("d" "default" entry
     "* %<%H:%M>: %?"
-    :if-new (file+head "%<%Y-%m-%d>" "#+title: %<%Y-%m-%d>\n")
+    :if-new (file+head "%<%Y-%m-%d>.org" "#+title: Journal %<%Y-%m-%d>\n#+filetags: journal")
     :unnarrowed t))
  org-roam-ui-sync-theme t
  org-roam-ui-follow t

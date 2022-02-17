@@ -120,3 +120,4 @@ source $ZSH/oh-my-zsh.sh
 alias vim="CC=/opt/homebrew/bin/gcc-11 nvim"
 alias nvim="CC=/opt/homebrew/bin/gcc-11 nvim"
 alias python3="/opt/homebrew/bin/python3"
+alias doom="${HOME}/.emacs.d/bin/doom"
