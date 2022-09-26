@@ -6,12 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
-(setq
- user-full-name "Martin Heuschober"
- user-mail-address "epsilonhalbe@gmail.com"
- doom-theme 'doom-one
- tab-width 2
-)
+(setq user-full-name "Martin Heuschober"
+      user-mail-address "martin_heuschober@trimble.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -29,45 +25,48 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
+;; (setq doom-theme 'doom-one)
+;; (setq doom-theme 'nord-light)
+;; (setq doom-theme 'doom-outrun-electric)
+(setq doom-theme 'doom-nova)
+;; (setq doom-theme 'doom-solarized-dark)
+;; (setq doom-theme 'doom-solarized-light)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq
- org-directory "~/Dropbox/org/"
- org-ellipsis " ▼ "
- org-id-link-to-org-use-id t
- org-log-done 'time
- org-log-into-drawer t
- org-log-state-notes-insert-after-drawers nil)
+(setq org-directory "~/Dropbox/org/")
+(require 'org-re-reveal)
+(setq org-id-link-to-org-use-id t)
+(setq org-log-into-drawer t)
+(setq org-log-state-notes-into-drawer t)
 
-(setq
- org-roam-dailies-directory "journal/"
- org-roam-directory "~/Dropbox/org/roam/"
- org-roam-capture-templates
- '(("d" "default" plain
-    "%?"
-    :if-new (file+head "%<%Y-%m-%d_%H%M>-${slug}.org" "#+title: ${title}\n#+filetags: ${filetags}")
-    :unnarrowed t))
- org-roam-dailies-capture-templates
- '(("d" "default" entry
-    "* %<%H:%M>: %?"
-    :if-new (file+head "%<%Y-%m-%d>.org" "#+title: Journal %<%Y-%m-%d>\n#+filetags: journal")
-    :unnarrowed t))
- org-roam-ui-sync-theme t
- org-roam-ui-follow t
- org-roam-ui-update-on-save t
- org-roam-ui-open-on-start t
+;;(make-directory "~/Dropbox/org/roam/")
+(setq org-roam-directory (file-truename "~/Dropbox/org/roam/"))
+
+;;(make-directory "~/Dropbox/org/roam/journal/")
+(setq org-roam-dailies-directory "journal/")
+(setq org-cite-global-bibliography '("~/Dropbox/org/forgetmenot/bibliography.bib"))
+(setq org-archive-location "~/Dropbox/org/archive/%s_archive::")
+(setq org-agenda-files (list "~/Dropbox/org/forgetmenot"))
+
+(setq org-roam-capture-templates
+  '(("d" "default" plain "%?"
+     :target (file+head "%<%Y-%m-%d_%H%M>-${slug}.org" "#+title: ${title}\n#+filetags: ${filetags}\n")
+     :unnarrowed t))
 )
 
-(setq org-agenda-prefix-format
-      '((agenda . " %i %-12:c%?-12t% s")
-        (todo   . " ")
-        (tags   . " %i %-12:c")
-        (search . " %i %-12:c")))
- ;; This determines the style of line numbers in effect. If set to `nil', line
- ;; numbers are disabled. For relative line numbers, set this to `relative'.
- (setq display-line-numbers-type t)
- (setq TeX-engine 'xetex)
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type t)
+(setq require-final-newline nil)
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+(setq org-plantuml-jar-path "/usr/local/Cellar/plantuml/*/libexec/plantuml.jar")
+(setq load-prefer-newer t)
+(setq lsp-metals-install-version "0.11.8")
+
+
+(setq lsp-ui-sideline-diagnostic-max-lines 9)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
