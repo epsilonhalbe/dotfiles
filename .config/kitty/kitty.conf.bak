@@ -1510,6 +1510,6 @@ map kitty_mod+backspace           change_font_size all 0
 
 
 # BEGIN_KITTY_THEME
-# 1984 Dark
+# Monokai
 include current-theme.conf
 # END_KITTY_THEME

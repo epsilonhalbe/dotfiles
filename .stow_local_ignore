@@ -1,2 +1,4 @@
 \.git
 \.gitignore
+\.gitmodules
+\.stow_local_ignore
