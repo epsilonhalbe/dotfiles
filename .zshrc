@@ -88,6 +88,7 @@ plugins=(
   scala
   timer
   tmux
+  zoxide
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -117,7 +118,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias vim="CC=/opt/homebrew/bin/gcc-11 nvim"
-alias nvim="CC=/opt/homebrew/bin/gcc-11 nvim"
-alias python3="/opt/homebrew/bin/python3"
+alias vim="CC=$(where gcc-12) nvim"
+alias nvim="CC=$(where gcc-12) nvim"
 alias doom="${HOME}/.emacs.d/bin/doom"

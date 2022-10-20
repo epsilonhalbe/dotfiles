@@ -2,7 +2,7 @@ return require("packer").startup(function()
   use { "nvim-treesitter/nvim-treesitter" }
   use { "folke/tokyonight.nvim" }
   use { "nvim-orgmode/orgmode",
-    config = function() require("orgmode").setup{} end
+    config = function() require("orgmode").setup_ts_grammar() end
   }
   use { 'lewis6991/spellsitter.nvim',
     config = function() require('spellsitter').setup() end
@@ -47,7 +47,7 @@ return require("packer").startup(function()
     },
     requires = {"kyazdani42/nvim-web-devicons", opt = true}
   }
-  use { "blackCauldron7/surround.nvim",
+  use { "Mephistophiles/surround.nvim",
     config = function()
       require"surround".setup{ mappings_style = "surround" }
     end

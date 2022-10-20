@@ -128,3 +128,5 @@ lib-cov
 pids
 logs
 results
+
+.config/karabiner/automatic_backups/
